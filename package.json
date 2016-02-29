@@ -1,0 +1,27 @@
+{
+  "name": "global-illumination-js",
+  "version": "0.0.1",
+  "description": "Global Illumination using parallel path tracing",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/01alchemist/ParallelRayJS.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/01alchemist/ParallelRayJS/issues"
+  },
+  "homepage": "https://github.com/01alchemist/ParallelRayJS",
+  "dependencies": {
+    "systemjs": "0.19.6",
+    "bytearray": "latest"
+  },
+  "devDependencies": {
+    "typescript": "^1.8.2",
+    "typings": "^0.6.8"
+  }
+}
