@@ -173,22 +173,17 @@ export abstract class GUI {
             simple: false
         });
 
-        this.info = new UIL.Title({
-            target: this.controlGui,
-            name: 'Info:',
-            id: "!",
-            size: 400,
-            pos: {left: '10px', bottom: '10px'},
-            simple: false
-        });
-
         if (!window["SharedArrayBuffer"]) {
+
+            this.webglOutput.style.display = "none";
+            this.giOutput.style.display = "none";
+
             var msg:string = "Oops! Your browser does not supported. Start chrome with --enable-blink-feature=SharedArrayBuffer or use Firefox Nightly";
             new UIL.Title({
                 target: this.controlGui,
                 name: msg,
                 id: "!",
-                size: "790",
+                size: "900",
                 pos: {left: '10px', top: '50px'},
                 titleColor: "#ff0000",
                 fontColor: "#ff0000",
@@ -211,6 +206,15 @@ export abstract class GUI {
             throw "Oops! Your browser does not supported. If you want to try this app go and get Firefox Nightly 46 https://nightly.mozilla.org";
 
         } else {
+
+            this.info = new UIL.Title({
+                target: this.controlGui,
+                name: 'Info:',
+                id: "!",
+                size: 400,
+                pos: {left: '10px', bottom: '10px'},
+                simple: false
+            });
 
             this.giCapable = true;
 
