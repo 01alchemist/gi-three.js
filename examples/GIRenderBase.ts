@@ -1,6 +1,7 @@
 import {CanvasDisplay} from "./CanvasDisplay";
 import {SmartBucketRenderer} from "../src/engine/renderer/SmartBucketRenderer";
 import {Camera} from "../src/engine/scene/Camera";
+import {SharedScene} from "../src/engine/scene/SharedScene";
 /**
  * Created by Nidin Vinayakan on 19/2/2016.
  */
@@ -20,6 +21,7 @@ export abstract class GIRenderBase extends CanvasDisplay {
 
     constructor(i_width:number, i_height:number, container:HTMLElement) {
         super(i_width, i_height, container);
+        this.renderer = new SmartBucketRenderer();
     }
 
     updateCameraSamples(newValue:number) {
@@ -72,9 +74,6 @@ export abstract class GIRenderBase extends CanvasDisplay {
         console.info("      Iterations          :   " + this.iterations);
         console.info("      Block-Iterations    :   " + this.blockIterations);
 
-        if (!this.renderer) {
-            this.renderer = new SmartBucketRenderer();
-        }
         var self = this;
         this.pixels = this.renderer.render(
             this.scene, this.camera, this.i_width, this.i_height, this.cameraSamples, this.hitSamples,

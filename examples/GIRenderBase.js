@@ -19,6 +19,7 @@ System.register(["./CanvasDisplay", "../src/engine/renderer/SmartBucketRenderer"
                 __extends(GIRenderBase, _super);
                 function GIRenderBase(i_width, i_height, container) {
                     _super.call(this, i_width, i_height, container);
+                    this.renderer = new SmartBucketRenderer_1.SmartBucketRenderer();
                 }
                 GIRenderBase.prototype.updateCameraSamples = function (newValue) {
                     if (this.cameraSamples != newValue) {
@@ -62,9 +63,6 @@ System.register(["./CanvasDisplay", "../src/engine/renderer/SmartBucketRenderer"
                     console.info("      Bounces             :   " + this.bounces);
                     console.info("      Iterations          :   " + this.iterations);
                     console.info("      Block-Iterations    :   " + this.blockIterations);
-                    if (!this.renderer) {
-                        this.renderer = new SmartBucketRenderer_1.SmartBucketRenderer();
-                    }
                     var self = this;
                     this.pixels = this.renderer.render(this.scene, this.camera, this.i_width, this.i_height, this.cameraSamples, this.hitSamples, this.bounces, this.iterations, this.blockIterations, onUpdate, onInit);
                     function onUpdate(rect) {

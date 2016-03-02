@@ -130,6 +130,9 @@ System.register(["./Vector3", "../scene/shapes/Box", "./Ray"], function(exports_
                 Matrix4.fromJson = function (m) {
                     return new Matrix4(m.x00, m.x01, m.x02, m.x03, m.x10, m.x11, m.x12, m.x13, m.x20, m.x21, m.x22, m.x23, m.x30, m.x31, m.x32, m.x33);
                 };
+                Matrix4.fromTHREEJS = function (e) {
+                    return new Matrix4(e[0], e[1], e[2], e[3], e[4], e[5], e[6], e[7], e[8], e[9], e[10], e[11], e[12], e[13], e[14], e[15]);
+                };
                 Matrix4.identity = function () {
                     return new Matrix4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
                 };

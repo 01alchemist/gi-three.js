@@ -40,8 +40,8 @@ export class Example1 extends GUI {
 
         //this.threeJSView.scene.add(new THREE.CameraHelper(pointLight.shadow.camera));
 
-        var geometry = new THREE.SphereGeometry(1, 32, 32);
-        var material = new THREE.MeshBasicMaterial({color: color});
+        var geometry:any  = new THREE.SphereGeometry(1, 32, 32);
+        var material:any  = new THREE.MeshBasicMaterial({color: color});
         var sphere = new THREE.Mesh(geometry, material);
         pointLight.add(sphere);
 
@@ -63,11 +63,11 @@ export class Example1 extends GUI {
         var onError = function (xhr) {
         };
 
-        var geometry = new THREE.PlaneGeometry(100, 100);
-        var material = new THREE.MeshPhongMaterial({color: 0xffffff});
+        geometry = new THREE.PlaneGeometry(100, 100);
+        material = new THREE.MeshPhongMaterial({color: 0xffffff});
         var mesh = new THREE.Mesh(geometry, material);
         mesh.rotation.set(MathUtils.radians(-90), 0, 0);
-        mesh.caseShadow = false;
+        mesh.castShadow = false;
         mesh.receiveShadow = true;
         this.threeJSView.scene.add(mesh);
 
@@ -79,13 +79,18 @@ export class Example1 extends GUI {
             self.model.receiveShadow = false;
             object.traverse(function (child) {
                 if (child instanceof THREE.Mesh) {
-                    child.material.color = new THREE.Color(1, 0, 0);
+                    child.material.color = new THREE.Color(0xB9121B);
+                    child.material.ior = 2;
                     //child.castShadow = true;
                     child.receiveShadow = false;
                 }
             });
             self.threeJSView.scene.add(object);
-            self.giJSView.setThreeJSScene(self.threeJSView.scene);
+            self.giJSView.setThreeJSScene(self.threeJSView.scene, function(){
+                if(self._tracing.value){
+                    self.giJSView.toggleTrace(true);
+                }
+            });
             self.render();
         }, onProgress, onError);
 
@@ -98,7 +103,6 @@ export class Example1 extends GUI {
                 self.giJSView.toggleTrace(true);
             }
         });*/
-        this.giJSView.setThreeJSScene(this.threeJSView.scene);
         this.threeJSView.onCameraChange = function(camera){
             self.giJSView.updateCamera(camera);
         };
