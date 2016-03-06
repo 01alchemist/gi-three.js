@@ -54,6 +54,7 @@ System.register(["../../math/Matrix4", "../../math/Hit", "./Shape"], function(ex
                 TransformedShape.prototype.read = function (memory) {
                     this.matrix.read(memory);
                     this.inverse = this.matrix.inverse();
+                    -;
                     var container = [];
                     Shape_1.restoreShape(memory, container);
                     this.shape = container[0];
