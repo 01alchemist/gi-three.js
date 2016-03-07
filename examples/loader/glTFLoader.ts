@@ -1,8 +1,7 @@
 import {ByteArray} from "xdata/core";
-import {glTFParser} from "../parser/glTFParser";
-import {HttpLoader} from "../../../../common/src/http/HttpLoader";
 import MeshBasicMaterial = THREE.MeshBasicMaterial;
-import {glTFPipe} from "../pipe/glTFPipe";
+import {HttpLoader} from "./HttpLoader";
+import {glTFPipe} from "./glTFPipe";
 /**
  * Created by Nidin Vinayakan on 01-03-2016.
  */

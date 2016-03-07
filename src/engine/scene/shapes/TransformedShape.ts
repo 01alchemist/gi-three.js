@@ -48,7 +48,7 @@ export class TransformedShape implements Shape {
 
     read(memory:ByteArrayBase|DirectMemory):number{
         this.matrix.read(memory);
-        this.inverse = this.matrix.inverse();-
+        this.inverse = this.matrix.inverse();
         var container:Shape[] = [];
         restoreShape(memory, container);
         this.shape = container[0];

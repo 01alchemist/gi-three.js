@@ -1,4 +1,6 @@
-System.register(["../shapes/Box", "../../math/Hit", "./SharedNode", "../../../pointer/ByteArrayBase"], function(exports_1) {
+System.register(["../shapes/Box", "../../math/Hit", "./SharedNode", "../../../pointer/ByteArrayBase"], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
     var Box_1, Hit_1, SharedNode_1, ByteArrayBase_1, SharedNode_2;
     var SharedTree;
     return {
@@ -64,7 +66,7 @@ System.register(["../shapes/Box", "../../math/Hit", "./SharedNode", "../../../po
                     return memory.position;
                 };
                 return SharedTree;
-            })();
+            }());
             exports_1("SharedTree", SharedTree);
         }
     }

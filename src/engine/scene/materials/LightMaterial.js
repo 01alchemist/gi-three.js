@@ -1,4 +1,6 @@
-System.register(["./Material"], function(exports_1) {
+System.register(["./Material"], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
@@ -20,7 +22,7 @@ System.register(["./Material"], function(exports_1) {
                     this.type = Material_2.MaterialType.EMISSIVE;
                 }
                 return LightMaterial;
-            })(Material_1.Material);
+            }(Material_1.Material));
             exports_1("LightMaterial", LightMaterial);
         }
     }

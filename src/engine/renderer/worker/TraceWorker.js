@@ -1,4 +1,6 @@
-System.register(["../../scene/Camera", "../../math/Color", "../Renderer", "../../scene/SharedScene", "../../../pointer/DirectMemory"], function(exports_1) {
+System.register(["../../scene/Camera", "../../math/Color", "../Renderer", "../../scene/SharedScene", "../../../pointer/DirectMemory"], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
     var Camera_1, Color_1, Renderer_1, SharedScene_1, DirectMemory_1;
     var TraceWorker;
     return {
@@ -190,7 +192,7 @@ System.register(["../../scene/Camera", "../../math/Color", "../Renderer", "../..
                 TraceWorker.TRACED = "TRACED";
                 TraceWorker.TERMINATE = "TERMINATE";
                 return TraceWorker;
-            })();
+            }());
             exports_1("TraceWorker", TraceWorker);
             new TraceWorker();
         }

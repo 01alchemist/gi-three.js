@@ -2,6 +2,7 @@ import {GUI} from "./GUI";
 import {GIJSView} from "./GIJSView";
 import {ThreeJSView} from "./ThreeJSView";
 import {MathUtils} from "../src/engine/utils/MathUtils";
+import {glTFLoader} from "./loader/glTFLoader";
 /**
  * Created by Nidin Vinayakan on 27-02-2016.
  */
@@ -71,10 +72,8 @@ export class Example1 extends GUI {
         mesh.receiveShadow = true;
         this.threeJSView.scene.add(mesh);
 
-        var loader = new THREE.OBJLoader(manager);
-        loader.load('../models/teapot.obj', function (object) {
-        //loader.load('../models/dragon.obj', function (object) {
-        //loader.load('../models/emerald.obj', function (object) {
+        var loader = new glTFLoader();
+        loader.load('../models/teapot.gltf', function (object) {
             self.model = object;
             self.model.castShadow = true;
             self.model.receiveShadow = false;
@@ -96,7 +95,7 @@ export class Example1 extends GUI {
                 }
             });
             self.render();
-        }, onProgress, onError);
+        }, onError);
 
 
         /* GI */

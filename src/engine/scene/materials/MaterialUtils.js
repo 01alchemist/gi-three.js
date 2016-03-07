@@ -1,4 +1,6 @@
-System.register(["./Material", "../../math/Color", "./Texture", "./Attenuation", "./DiffuseMaterial", "./SpecularMaterial", "./ClearMaterial", "./GlossyMaterial", "./LightMaterial"], function(exports_1) {
+System.register(["./Material", "../../math/Color", "./Texture", "./Attenuation", "./DiffuseMaterial", "./SpecularMaterial", "./ClearMaterial", "./GlossyMaterial", "./LightMaterial"], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
     var Material_1, Material_2, Color_1, Texture_1, Attenuation_1, DiffuseMaterial_1, SpecularMaterial_1, ClearMaterial_1, GlossyMaterial_1, LightMaterial_1;
     var MaterialUtils;
     return {
@@ -61,7 +63,7 @@ System.register(["./Material", "../../math/Color", "./Texture", "./Attenuation",
                 };
                 MaterialUtils.debug = true;
                 return MaterialUtils;
-            })();
+            }());
             exports_1("MaterialUtils", MaterialUtils);
         }
     }

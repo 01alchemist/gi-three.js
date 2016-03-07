@@ -12,11 +12,15 @@ export class Attenuation {
     }
 
     static fromJson(attenuation:Attenuation):Attenuation {
-        return new Attenuation(
-            attenuation.constant,
-            attenuation.linear,
-            attenuation.quadratic
-        );
+        if(!attenuation){
+            return NoAttenuation;
+        }else {
+            return new Attenuation(
+                attenuation.constant,
+                attenuation.linear,
+                attenuation.quadratic
+            );
+        }
     }
 
     compute(d:number):number {

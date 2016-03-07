@@ -1,4 +1,6 @@
-System.register(["../../pointer/DirectMemory"], function(exports_1) {
+System.register(["../../pointer/DirectMemory"], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
     var DirectMemory_1;
     var Vector3;
     return {
@@ -157,7 +159,7 @@ System.register(["../../pointer/DirectMemory"], function(exports_1) {
                 Vector3.SIZE = 3;
                 Vector3.NullVector = new Vector3(DirectMemory_1.DirectMemory.MIN_FLOAT32_VALUE, DirectMemory_1.DirectMemory.MIN_FLOAT32_VALUE, DirectMemory_1.DirectMemory.MIN_FLOAT32_VALUE);
                 return Vector3;
-            })();
+            }());
             exports_1("Vector3", Vector3);
         }
     }

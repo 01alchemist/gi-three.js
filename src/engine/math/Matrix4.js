@@ -1,4 +1,6 @@
-System.register(["./Vector3", "../scene/shapes/Box", "./Ray"], function(exports_1) {
+System.register(["./Vector3", "../scene/shapes/Box", "./Ray"], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
     var Vector3_1, Box_1, Ray_1;
     var Matrix4;
     return {
@@ -288,7 +290,7 @@ System.register(["./Vector3", "../scene/shapes/Box", "./Ray"], function(exports_
                 };
                 Matrix4.SIZE = 16;
                 return Matrix4;
-            })();
+            }());
             exports_1("Matrix4", Matrix4);
         }
     }

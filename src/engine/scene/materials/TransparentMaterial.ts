@@ -6,7 +6,7 @@ import {NoAttenuation} from "./Attenuation";
  */
 export class TransparentMaterial extends Material{
 
-    constructor(color:Color, index:number, gloss:number, tint:number){
+    constructor(color:Color, index:number=1, gloss:number=1, tint:number=0){
         super(color, null, null, null, 1, 0, NoAttenuation, index, gloss, tint, true);
     }
 }

@@ -1,4 +1,6 @@
-System.register([], function(exports_1) {
+System.register([], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
     var TraceJob;
     return {
         setters:[],
@@ -63,7 +65,7 @@ System.register([], function(exports_1) {
                     return _param;
                 };
                 return TraceJob;
-            })();
+            }());
             exports_1("TraceJob", TraceJob);
         }
     }

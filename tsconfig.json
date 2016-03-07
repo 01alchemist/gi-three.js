@@ -2,13 +2,12 @@
   "compilerOptions": {
     "target": "ES5",
     "module": "system",
-    "moduleResolution": "classic",
+    "moduleResolution": "node",
     "sourceMap": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "removeComments": true,
-    "noImplicitAny": false,
-    "outFile":"build/gi-three.js"
+    "noImplicitAny": false
   },
   "exclude": [
     "tools",

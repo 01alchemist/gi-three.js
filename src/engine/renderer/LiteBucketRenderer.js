@@ -1,4 +1,6 @@
-System.register(["./worker/TraceJobManager", "./worker/TraceJob"], function(exports_1) {
+System.register(["./worker/TraceJobManager", "./worker/TraceJob"], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
     var TraceJobManager_1, TraceJob_1;
     var LiteBucketRenderer;
     return {
@@ -63,7 +65,7 @@ System.register(["./worker/TraceJobManager", "./worker/TraceJob"], function(expo
                 LiteBucketRenderer.DEBUG = false;
                 LiteBucketRenderer.interval = 0;
                 return LiteBucketRenderer;
-            })();
+            }());
             exports_1("LiteBucketRenderer", LiteBucketRenderer);
         }
     }

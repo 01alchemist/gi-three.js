@@ -1,4 +1,6 @@
-System.register(["../materials/Material", "./Box", "../../math/Vector3", "../../math/Hit", "../../math/Constants", "../../math/Matrix4", "./Shape", "../materials/MaterialUtils", "../../../pointer/ByteArrayBase"], function(exports_1) {
+System.register(["../materials/Material", "./Box", "../../math/Vector3", "../../math/Hit", "../../math/Constants", "../../math/Matrix4", "./Shape", "../materials/MaterialUtils", "../../../pointer/ByteArrayBase"], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
     var Material_1, Box_1, Vector3_1, Hit_1, Constants_1, Hit_2, Matrix4_1, Shape_1, MaterialUtils_1, ByteArrayBase_1;
     var Triangle;
     return {
@@ -367,7 +369,7 @@ System.register(["../materials/Material", "./Box", "../../math/Vector3", "../../
                 };
                 Triangle.SIZE = Box_1.Box.SIZE + (Vector3_1.Vector3.SIZE * 9) + 2;
                 return Triangle;
-            })();
+            }());
             exports_1("Triangle", Triangle);
         }
     }

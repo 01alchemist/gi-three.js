@@ -1,4 +1,6 @@
-System.register(["./worker/TraceJobManager", "./worker/TraceJob"], function(exports_1) {
+System.register(["./worker/TraceJobManager", "./worker/TraceJob"], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
     var TraceJobManager_1, TraceJob_1;
     var SmartBucketRenderer;
     return {
@@ -83,7 +85,7 @@ System.register(["./worker/TraceJobManager", "./worker/TraceJob"], function(expo
                 SmartBucketRenderer.DEBUG = false;
                 SmartBucketRenderer.interval = 0;
                 return SmartBucketRenderer;
-            })();
+            }());
             exports_1("SmartBucketRenderer", SmartBucketRenderer);
         }
     }

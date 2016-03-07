@@ -1,4 +1,6 @@
-System.register(["../../math/Vector3", "../materials/Material", "./Box", "../../math/Hit", "./Shape", "../materials/MaterialUtils"], function(exports_1) {
+System.register(["../../math/Vector3", "../materials/Material", "./Box", "../../math/Hit", "./Shape", "../materials/MaterialUtils"], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
     var Vector3_1, Material_1, Box_1, Hit_1, Hit_2, Shape_1, MaterialUtils_1;
     var Sphere;
     return {
@@ -134,7 +136,7 @@ System.register(["../../math/Vector3", "../materials/Material", "./Box", "../../
                     }
                 };
                 return Sphere;
-            })();
+            }());
             exports_1("Sphere", Sphere);
         }
     }

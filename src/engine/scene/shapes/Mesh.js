@@ -1,4 +1,6 @@
-System.register(["./Triangle", "../../math/Matrix4", "../../math/Vector3", "../../math/Color", "../../utils/MapUtils", "../tree/Tree", "./Box", "./Shape", "../tree/SharedTree"], function(exports_1) {
+System.register(["./Triangle", "../../math/Matrix4", "../../math/Vector3", "../../math/Color", "../../utils/MapUtils", "../tree/Tree", "./Box", "./Shape", "../tree/SharedTree"], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
     var Triangle_1, Matrix4_1, Vector3_1, Color_1, MapUtils_1, Tree_1, Box_1, Shape_1, SharedTree_1;
     var Mesh;
     return {
@@ -121,7 +123,7 @@ System.register(["./Triangle", "../../math/Matrix4", "../../math/Vector3", "../.
                     return new Color_1.Color();
                 };
                 Mesh.prototype.getMaterial = function (p) {
-                    return null;
+                    return this.material;
                 };
                 Mesh.prototype.getNormal = function (p) {
                     return new Vector3_1.Vector3();
@@ -204,7 +206,7 @@ System.register(["./Triangle", "../../math/Matrix4", "../../math/Vector3", "../.
                 };
                 Mesh.inter = 0;
                 return Mesh;
-            })();
+            }());
             exports_1("Mesh", Mesh);
         }
     }

@@ -1,4 +1,6 @@
-System.register([], function(exports_1) {
+System.register([], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
     var ByteArrayBase;
     return {
         setters:[],
@@ -760,7 +762,7 @@ System.register([], function(exports_1) {
                 ByteArrayBase.SIZE_OF_FLOAT32 = 4;
                 ByteArrayBase.SIZE_OF_FLOAT64 = 8;
                 return ByteArrayBase;
-            })();
+            }());
             exports_1("ByteArrayBase", ByteArrayBase);
         }
     }

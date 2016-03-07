@@ -1,4 +1,6 @@
-System.register(["./TraceWorker"], function(exports_1) {
+System.register(["./TraceWorker"], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
     var TraceWorker_1;
     var Thread;
     return {
@@ -47,7 +49,7 @@ System.register(["./TraceWorker"], function(exports_1) {
                     this.isTracing = false;
                 };
                 return Thread;
-            })();
+            }());
             exports_1("Thread", Thread);
         }
     }

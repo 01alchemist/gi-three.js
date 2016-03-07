@@ -1,4 +1,6 @@
-System.register(["../math/Color", "./worker/TraceWorkerManager"], function(exports_1) {
+System.register(["../math/Color", "./worker/TraceWorkerManager"], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
     var Color_1, TraceWorkerManager_1;
     var Renderer;
     return {
@@ -134,7 +136,7 @@ System.register(["../math/Color", "./worker/TraceWorkerManager"], function(expor
                 Renderer.DEBUG = false;
                 Renderer.interval = 0;
                 return Renderer;
-            })();
+            }());
             exports_1("Renderer", Renderer);
         }
     }

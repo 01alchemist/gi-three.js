@@ -746,7 +746,7 @@ declare module THREE {
          */
         computeVertexNormals(): void;
 
-        computeOffsets(size: number): void;
+        computeOffsets(size?: number): void;
         merge(geometry: BufferGeometry, offset: number): BufferGeometry;
         normalizeNormals(): void;
         toJSON(): any;

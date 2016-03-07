@@ -20,6 +20,7 @@ export class Mesh implements Shape {
 
     type:ShapeType = ShapeType.MESH;
     index:number;
+    material:Material;
 
     get memorySize():number {
         if (this.box && this.triangles) {
@@ -130,7 +131,7 @@ export class Mesh implements Shape {
     }
 
     getMaterial(p:Vector3):Material {
-        return null;//new Material(); // not implemented
+        return this.material;//new Material(); // not implemented
     }
 
     getNormal(p:Vector3):Vector3 {

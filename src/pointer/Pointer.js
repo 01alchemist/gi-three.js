@@ -1,4 +1,6 @@
-System.register(["./DirectMemory"], function(exports_1) {
+System.register(["./DirectMemory"], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
     var DirectMemory_1;
     var Pointer;
     function sizeof(ptr) {
@@ -36,7 +38,7 @@ System.register(["./DirectMemory"], function(exports_1) {
                     return this.reference;
                 };
                 return Pointer;
-            })();
+            }());
             exports_1("Pointer", Pointer);
         }
     }

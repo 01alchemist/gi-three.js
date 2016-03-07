@@ -1,4 +1,4 @@
-import {glTFParser} from "../parser/glTFParser";
+import {glTFParser} from "./glTFParser";
 /**
  * Created by Nidin Vinayakan on 05-03-2016.
  */

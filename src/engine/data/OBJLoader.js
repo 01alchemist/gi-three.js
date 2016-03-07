@@ -1,4 +1,6 @@
-System.register(["../scene/shapes/Mesh", "../math/Vector3", "../scene/shapes/Triangle", "../utils/MapUtils", "../math/Color"], function(exports_1) {
+System.register(["../scene/shapes/Mesh", "../math/Vector3", "../scene/shapes/Triangle", "../utils/MapUtils", "../math/Color"], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
     var Mesh_1, Vector3_1, Triangle_1, MapUtils_1, Color_1;
     var OBJLoader;
     return {
@@ -221,7 +223,7 @@ System.register(["../scene/shapes/Mesh", "../math/Vector3", "../scene/shapes/Tri
                     return null;
                 };
                 return OBJLoader;
-            })();
+            }());
             exports_1("OBJLoader", OBJLoader);
         }
     }
