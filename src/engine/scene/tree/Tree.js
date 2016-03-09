@@ -1,6 +1,4 @@
-System.register(["../shapes/Box", "./Node", "../../math/Hit"], function(exports_1, context_1) {
-    "use strict";
-    var __moduleName = context_1 && context_1.id;
+System.register(["../shapes/Box", "./Node", "../../math/Hit"], function(exports_1) {
     var Box_1, Node_1, Hit_1;
     var Tree;
     return {
@@ -37,7 +35,7 @@ System.register(["../shapes/Box", "./Node", "../../math/Hit"], function(exports_
                     return this.root.intersect(r, t.min, t.max);
                 };
                 return Tree;
-            }());
+            })();
             exports_1("Tree", Tree);
         }
     }

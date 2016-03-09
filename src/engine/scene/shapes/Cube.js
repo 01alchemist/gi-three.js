@@ -1,6 +1,4 @@
-System.register(["../../math/Vector3", "../materials/Material", "./Box", "../../math/Constants", "../../math/Hit", "./Shape", "../materials/MaterialUtils"], function(exports_1, context_1) {
-    "use strict";
-    var __moduleName = context_1 && context_1.id;
+System.register(["../../math/Vector3", "../materials/Material", "./Box", "../../math/Constants", "../../math/Hit", "./Shape", "../materials/MaterialUtils"], function(exports_1) {
     var Vector3_1, Material_1, Box_1, Constants_1, Hit_1, Hit_2, Shape_1, MaterialUtils_1;
     var Cube;
     return {
@@ -133,7 +131,7 @@ System.register(["../../math/Vector3", "../materials/Material", "./Box", "../../
                     return new Vector3_1.Vector3(x, y, z);
                 };
                 return Cube;
-            }());
+            })();
             exports_1("Cube", Cube);
         }
     }

@@ -1,6 +1,4 @@
-System.register(["../../math/Color", "./Attenuation"], function(exports_1, context_1) {
-    "use strict";
-    var __moduleName = context_1 && context_1.id;
+System.register(["../../math/Color", "./Attenuation"], function(exports_1) {
     var Color_1, Attenuation_1, Attenuation_2;
     var MaterialType, Material;
     return {
@@ -129,7 +127,7 @@ System.register(["../../math/Color", "./Attenuation"], function(exports_1, conte
                 Material.SIZE = Color_1.Color.SIZE + Attenuation_1.Attenuation.SIZE + 6;
                 Material.map = [];
                 return Material;
-            }());
+            })();
             exports_1("Material", Material);
         }
     }

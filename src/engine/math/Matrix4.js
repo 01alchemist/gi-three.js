@@ -1,6 +1,4 @@
-System.register(["./Vector3", "../scene/shapes/Box", "./Ray"], function(exports_1, context_1) {
-    "use strict";
-    var __moduleName = context_1 && context_1.id;
+System.register(["./Vector3", "../scene/shapes/Box", "./Ray"], function(exports_1) {
     var Vector3_1, Box_1, Ray_1;
     var Matrix4;
     return {
@@ -133,7 +131,7 @@ System.register(["./Vector3", "../scene/shapes/Box", "./Ray"], function(exports_
                     return new Matrix4(m.x00, m.x01, m.x02, m.x03, m.x10, m.x11, m.x12, m.x13, m.x20, m.x21, m.x22, m.x23, m.x30, m.x31, m.x32, m.x33);
                 };
                 Matrix4.fromTHREEJS = function (e) {
-                    return new Matrix4(e[0], e[1], e[2], e[3], e[4], e[5], e[6], e[7], e[8], e[9], e[10], e[11], e[12], e[13], e[14], e[15]);
+                    return new Matrix4(e[0], e[1], e[2], e[3], -e[4], -e[5], -e[6], e[7], e[8], e[9], e[10], e[11], e[12], e[13], e[14], e[15]);
                 };
                 Matrix4.identity = function () {
                     return new Matrix4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
@@ -290,7 +288,7 @@ System.register(["./Vector3", "../scene/shapes/Box", "./Ray"], function(exports_
                 };
                 Matrix4.SIZE = 16;
                 return Matrix4;
-            }());
+            })();
             exports_1("Matrix4", Matrix4);
         }
     }

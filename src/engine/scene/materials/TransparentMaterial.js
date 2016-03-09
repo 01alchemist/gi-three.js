@@ -1,6 +1,4 @@
-System.register(["./Material", "./Attenuation"], function(exports_1, context_1) {
-    "use strict";
-    var __moduleName = context_1 && context_1.id;
+System.register(["./Material", "./Attenuation"], function(exports_1) {
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
@@ -26,7 +24,7 @@ System.register(["./Material", "./Attenuation"], function(exports_1, context_1) 
                     _super.call(this, color, null, null, null, 1, 0, Attenuation_1.NoAttenuation, index, gloss, tint, true);
                 }
                 return TransparentMaterial;
-            }(Material_1.Material));
+            })(Material_1.Material);
             exports_1("TransparentMaterial", TransparentMaterial);
         }
     }

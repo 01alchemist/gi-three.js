@@ -1,6 +1,4 @@
-System.register(["../Axis", "../../math/Hit", "../../utils/MapUtils", "../../utils/MathUtils", "../../../pointer/ByteArrayBase", "../../../pointer/DirectMemory"], function(exports_1, context_1) {
-    "use strict";
-    var __moduleName = context_1 && context_1.id;
+System.register(["../Axis", "../../math/Hit", "../../utils/MapUtils", "../../utils/MathUtils", "../../../pointer/ByteArrayBase", "../../../pointer/DirectMemory"], function(exports_1) {
     var Axis_1, Hit_1, MapUtils_1, MapUtils_2, MathUtils_1, ByteArrayBase_1, DirectMemory_1;
     var NodeMarker, SharedNode;
     return {
@@ -440,7 +438,7 @@ System.register(["../Axis", "../../math/Hit", "../../utils/MapUtils", "../../uti
                 };
                 SharedNode.map = [];
                 return SharedNode;
-            }());
+            })();
             exports_1("SharedNode", SharedNode);
         }
     }

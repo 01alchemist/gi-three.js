@@ -1,6 +1,4 @@
-System.register([], function(exports_1, context_1) {
-    "use strict";
-    var __moduleName = context_1 && context_1.id;
+System.register([], function(exports_1) {
     var INF, EPS, shift, uvnan, uvinf, uvneginf, mask, bias;
     return {
         setters:[],

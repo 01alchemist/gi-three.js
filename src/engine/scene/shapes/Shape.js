@@ -1,6 +1,4 @@
-System.register(["./Cube", "./Sphere", "./Mesh", "./Triangle", "./TransformedShape"], function(exports_1, context_1) {
-    "use strict";
-    var __moduleName = context_1 && context_1.id;
+System.register(["./Cube", "./Sphere", "./Mesh", "./Triangle", "./TransformedShape"], function(exports_1) {
     var Cube_1, Sphere_1, Mesh_1, Triangle_1, TransformedShape_1;
     var ShapeType;
     function ShapesfromJson(shapes) {

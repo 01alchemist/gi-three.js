@@ -1,6 +1,4 @@
-System.register(["./Constants", "./HitInfo", "./Ray"], function(exports_1, context_1) {
-    "use strict";
-    var __moduleName = context_1 && context_1.id;
+System.register(["./Constants", "./HitInfo", "./Ray"], function(exports_1) {
     var Constants_1, HitInfo_1, Ray_1;
     var Hit, NoHit;
     return {
@@ -38,7 +36,7 @@ System.register(["./Constants", "./HitInfo", "./Ray"], function(exports_1, conte
                     return new HitInfo_1.HitInfo(shape, position, normal, ray, color, material, inside);
                 };
                 return Hit;
-            }());
+            })();
             exports_1("Hit", Hit);
             exports_1("NoHit", NoHit = new Hit(null, Constants_1.INF));
         }

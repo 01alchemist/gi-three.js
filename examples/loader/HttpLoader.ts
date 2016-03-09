@@ -6,7 +6,6 @@ import {LZMAPipe} from "./LZMAPipe";
 export class HttpLoader {
 
     constructor() {
-        super();
     }
 
     public load(url:string, callback:Function) {

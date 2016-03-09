@@ -17,6 +17,7 @@ export class Example1 extends GUI {
         this.i_width = 2560 / 2;
         this.i_height = 1440 / 2;
     }
+
     onInit() {
         var self = this;
 
@@ -41,10 +42,10 @@ export class Example1 extends GUI {
 
         //this.threeJSView.scene.add(new THREE.CameraHelper(pointLight.shadow.camera));
 
-        var geometry:any  = new THREE.SphereGeometry(1, 32, 32);
-        var material:any  = new THREE.MeshBasicMaterial({color: color});
+        var geometry:any = new THREE.SphereGeometry(1, 32, 32);
+        var material:any = new THREE.MeshBasicMaterial({color: color});
         var sphere = new THREE.Mesh(geometry, material);
-        pointLight.add(sphere);
+        //pointLight.add(sphere);
 
         this.threeJSView.scene.add(pointLight);
 
@@ -67,7 +68,9 @@ export class Example1 extends GUI {
         geometry = new THREE.PlaneGeometry(100, 100);
         material = new THREE.MeshPhongMaterial({color: 0xffffff});
         var mesh = new THREE.Mesh(geometry, material);
-        mesh.rotation.set(MathUtils.radians(-90), 0, 0);
+        //mesh.rotation.set(MathUtils.radians(-90), 0, 0);
+        var rotmat = new THREE.Matrix4().makeRotationX(MathUtils.radians(-90));
+        mesh.applyMatrix(rotmat);
         mesh.castShadow = false;
         mesh.receiveShadow = true;
         this.threeJSView.scene.add(mesh);
@@ -79,52 +82,60 @@ export class Example1 extends GUI {
             self.model.receiveShadow = false;
             object.traverse(function (child) {
                 if (child instanceof THREE.Mesh) {
-                    child.material.color = new THREE.Color(0x00ff00);
-                    child.material.ior = 1.3;
+                    child.material = new THREE.MeshPhongMaterial({color: 0xff0000});
+                    //child.material.color = new THREE.Color(0xff0000);
+                    //child.material.ior = 1.3;
                     //child.material.tint = 0.5;
                     //child.material.gloss = 0;
                     //child.material.transparent = true;
                     //child.castShadow = true;
                     child.receiveShadow = false;
+
+                    //mat.makeRotationAxis(new THREE.Vector3(1,0,0), MathUtils.radians(-90));
+                    var rotmat = new THREE.Matrix4().makeRotationX(MathUtils.radians(-90));
+                    var scalemat = new THREE.Matrix4().makeScale(0.03, 0.03, 0.03);
+                    child.applyMatrix(rotmat.multiply(scalemat));
+                    //child.applyMatrix(scalemat);
+                    //child.scale.set(0.03, 0.03, 0.03);
+                    //child.rotation.set(MathUtils.radians(-90), 0, 0);
                 }
             });
-            self.threeJSView.scene.add(object);
-            self.giJSView.setThreeJSScene(self.threeJSView.scene, function(){
-                if(self._tracing.value){
+            //self.threeJSView.scene.add(object);
+            self.giJSView.setThreeJSScene(self.threeJSView.scene, function () {
+                if (self._tracing.value) {
                     self.giJSView.toggleTrace(true);
                 }
             });
             self.render();
         }, onError);
 
-
         /* GI */
 
         /*this.giJSView.loadModel('../models/teapot.obj', function(){
-        //this.giJSView.loadModel('../models/emerald.obj', function(){
-            if(self._tracing.value){
-                self.giJSView.toggleTrace(true);
-            }
-        });*/
-        this.threeJSView.onCameraChange = function(camera){
+         //this.giJSView.loadModel('../models/emerald.obj', function(){
+         if(self._tracing.value){
+         self.giJSView.toggleTrace(true);
+         }
+         });*/
+        this.threeJSView.onCameraChange = function (camera) {
             self.giJSView.updateCamera(camera);
         };
         this.render();
     }
 
-    render(){
+    render() {
         this.threeJSView.render();
     }
 
     //configure GUI
-    toggleGI(newValue){
+    toggleGI(newValue) {
         super.toggleGI(newValue);
         if (newValue) {
-            if(!this._tracing.value && !this.traceInitialized){
+            if (!this._tracing.value && !this.traceInitialized) {
                 this._tracing.click();
                 this.traceInitialized = true;
             }
-            if(this._tracing.value && this.giJSView.dirty){
+            if (this._tracing.value && this.giJSView.dirty) {
                 this.giJSView.toggleTrace(newValue);
             }
         }

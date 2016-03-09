@@ -1,6 +1,4 @@
-System.register(["../../math/Matrix4", "../../math/Hit", "./Shape"], function(exports_1, context_1) {
-    "use strict";
-    var __moduleName = context_1 && context_1.id;
+System.register(["../../math/Matrix4", "../../math/Hit", "./Shape"], function(exports_1) {
     var Matrix4_1, Hit_1, Shape_1;
     var TransformedShape;
     return {
@@ -105,7 +103,7 @@ System.register(["../../math/Matrix4", "../../math/Hit", "./Shape"], function(ex
                     return this.matrix.mulPosition(this.shape.getRandomPoint());
                 };
                 return TransformedShape;
-            }());
+            })();
             exports_1("TransformedShape", TransformedShape);
         }
     }

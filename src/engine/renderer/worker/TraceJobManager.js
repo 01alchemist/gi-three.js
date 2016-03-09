@@ -1,6 +1,4 @@
-System.register(["./ThreadPool"], function(exports_1, context_1) {
-    "use strict";
-    var __moduleName = context_1 && context_1.id;
+System.register(["./ThreadPool"], function(exports_1) {
     var ThreadPool_1;
     var TraceJobManager;
     return {
@@ -234,7 +232,7 @@ System.register(["./ThreadPool"], function(exports_1, context_1) {
                     this.start();
                 };
                 return TraceJobManager;
-            }());
+            })();
             exports_1("TraceJobManager", TraceJobManager);
         }
     }

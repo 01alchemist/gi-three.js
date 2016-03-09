@@ -1,6 +1,4 @@
-System.register(["../math/Color", "./tree/Tree", "../utils/MapUtils", "../math/Vector3", "../math/Ray", "./shapes/Shape", "./shapes/Cube", "./shapes/Sphere", "./shapes/Mesh", "./shapes/TransformedShape", "./shapes/Triangle"], function(exports_1, context_1) {
-    "use strict";
-    var __moduleName = context_1 && context_1.id;
+System.register(["../math/Color", "./tree/Tree", "../utils/MapUtils", "../math/Vector3", "../math/Ray", "./shapes/Shape", "./shapes/Cube", "./shapes/Sphere", "./shapes/Mesh", "./shapes/TransformedShape", "./shapes/Triangle"], function(exports_1) {
     var Color_1, Tree_1, MapUtils_1, Vector3_1, Ray_1, Shape_1, Cube_1, Sphere_1, Mesh_1, TransformedShape_1, Triangle_1;
     var Scene;
     return {
@@ -182,7 +180,7 @@ System.register(["../math/Color", "./tree/Tree", "../utils/MapUtils", "../math/V
                 };
                 Scene.interval = 0;
                 return Scene;
-            }());
+            })();
             exports_1("Scene", Scene);
         }
     }

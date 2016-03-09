@@ -74,8 +74,17 @@ export class glTFLoader {
         var bufferGeo = new THREE.BufferGeometry();
 
         bufferGeo.addAttribute('position', new THREE.BufferAttribute(geo.positions, 3));
-        //bufferGeo.setIndex(new THREE.BufferAttribute(geo.indices, 1));
-        bufferGeo.addAttribute("index", new THREE.BufferAttribute(geo.indices, 1));
+
+        if (geo.indices.length <= 65535) {
+            var indices = new Uint16Array(geo.indices.length);
+            for (var i:number = 0; i < geo.indices.length; i++) {
+                indices[i] = geo.indices[i];
+            }
+        } else {
+            indices = geo.indices;
+        }
+        bufferGeo.setIndex(new THREE.BufferAttribute(indices, 1));
+        //bufferGeo.addAttribute("index", new THREE.BufferAttribute(geo.indices, 1));
 
         if (geo.normals !== undefined) {
             bufferGeo.addAttribute('normal', new THREE.BufferAttribute(geo.normals, 3));
@@ -85,7 +94,7 @@ export class glTFLoader {
             bufferGeo.addAttribute('uv', new THREE.BufferAttribute(geo.texCoords, 2));
         }
 
-        bufferGeo.computeOffsets();
+        //bufferGeo.computeOffsets();
         bufferGeo.computeBoundingSphere();
         bufferGeo.computeBoundingBox();
         return bufferGeo;

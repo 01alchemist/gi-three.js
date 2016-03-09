@@ -1,6 +1,4 @@
-System.register(["../math/Constants"], function(exports_1, context_1) {
-    "use strict";
-    var __moduleName = context_1 && context_1.id;
+System.register(["../math/Constants"], function(exports_1) {
     var Constants_1, Constants_2, Constants_3;
     var MathUtils;
     return {
@@ -66,7 +64,7 @@ System.register(["../math/Constants"], function(exports_1, context_1) {
                     return x;
                 };
                 return MathUtils;
-            }());
+            })();
             exports_1("MathUtils", MathUtils);
         }
     }

@@ -1,6 +1,4 @@
-System.register(["../Axis", "../../math/Hit", "../../utils/MapUtils", "../../utils/MathUtils"], function(exports_1, context_1) {
-    "use strict";
-    var __moduleName = context_1 && context_1.id;
+System.register(["../Axis", "../../math/Hit", "../../utils/MapUtils", "../../utils/MathUtils"], function(exports_1) {
     var Axis_1, Hit_1, MapUtils_1, MapUtils_2, MathUtils_1;
     var Node;
     return {
@@ -187,7 +185,7 @@ System.register(["../Axis", "../../math/Hit", "../../utils/MapUtils", "../../uti
                 };
                 Node.map = [];
                 return Node;
-            }());
+            })();
             exports_1("Node", Node);
         }
     }

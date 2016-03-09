@@ -1,6 +1,4 @@
-System.register([], function(exports_1, context_1) {
-    "use strict";
-    var __moduleName = context_1 && context_1.id;
+System.register([], function(exports_1) {
     var DataCache;
     return {
         setters:[],
@@ -17,7 +15,7 @@ System.register([], function(exports_1, context_1) {
                 };
                 DataCache.cache = new Map();
                 return DataCache;
-            }());
+            })();
             exports_1("DataCache", DataCache);
         }
     }

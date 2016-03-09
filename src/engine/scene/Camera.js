@@ -1,6 +1,4 @@
-System.register(["../math/Vector3", "../math/Ray"], function(exports_1, context_1) {
-    "use strict";
-    var __moduleName = context_1 && context_1.id;
+System.register(["../math/Vector3", "../math/Ray"], function(exports_1) {
     var Vector3_1, Ray_1;
     var Camera;
     return {
@@ -96,7 +94,7 @@ System.register(["../math/Vector3", "../math/Ray"], function(exports_1, context_
                 };
                 Camera.debug = true;
                 return Camera;
-            }());
+            })();
             exports_1("Camera", Camera);
         }
     }

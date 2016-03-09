@@ -1,6 +1,4 @@
-System.register(["./Vector3", "./Constants"], function(exports_1, context_1) {
-    "use strict";
-    var __moduleName = context_1 && context_1.id;
+System.register(["./Vector3", "./Constants"], function(exports_1) {
     var Vector3_1, Constants_1;
     var Ray;
     return {
@@ -92,7 +90,7 @@ System.register(["./Vector3", "./Constants"], function(exports_1, context_1) {
                     return "Ray:" + this.origin.toString() + " -> " + this.direction.toString();
                 };
                 return Ray;
-            }());
+            })();
             exports_1("Ray", Ray);
         }
     }

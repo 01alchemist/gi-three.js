@@ -1,6 +1,4 @@
-System.register([], function(exports_1, context_1) {
-    "use strict";
-    var __moduleName = context_1 && context_1.id;
+System.register([], function(exports_1) {
     function append(slice) {
         var elements = [];
         for (var _i = 1; _i < arguments.length; _i++) {

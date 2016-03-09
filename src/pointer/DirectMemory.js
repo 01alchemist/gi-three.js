@@ -1,6 +1,4 @@
-System.register(["./MemoryUtils", "./UTF8"], function(exports_1, context_1) {
-    "use strict";
-    var __moduleName = context_1 && context_1.id;
+System.register(["./MemoryUtils", "./UTF8"], function(exports_1) {
     var MemoryUtils_1, UTF8_1;
     var DirectMemory;
     return {
@@ -565,7 +563,7 @@ System.register(["./MemoryUtils", "./UTF8"], function(exports_1, context_1) {
                 DirectMemory.SIZE_OF_FLOAT32 = 4;
                 DirectMemory.SIZE_OF_FLOAT64 = 8;
                 return DirectMemory;
-            }());
+            })();
             exports_1("DirectMemory", DirectMemory);
         }
     }

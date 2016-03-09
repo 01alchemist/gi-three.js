@@ -19,6 +19,7 @@ import {TransformedShape} from "../src/engine/scene/shapes/TransformedShape";
 import {Matrix4} from "../src/engine/math/Matrix4";
 import {TransparentMaterial} from "../src/engine/scene/materials/TransparentMaterial";
 import {Attenuation} from "../src/engine/scene/materials/Attenuation";
+import {LinearAttenuation} from "../src/engine/scene/materials/Attenuation";
 
 /**
  * Created by Nidin Vinayakan on 27-02-2016.
@@ -32,9 +33,9 @@ export class GIJSView extends GIRenderBase {
         this.scene = new SharedScene();
 
         //default ground
-        this.scene.add(Cube.newCube(new Vector3(-100, -1, -100), new Vector3(100, 0, 100), new DiffuseMaterial(new Color(1, 1, 1))));
+        //this.scene.add(Cube.newCube(new Vector3(-100, -1, -100), new Vector3(100, 0, 100), new DiffuseMaterial(new Color(1, 1, 1))));
         //lights
-        this.scene.add(Sphere.newSphere(new Vector3(5, 5, 0), 1, new LightMaterial(Color.hexColor(0xffeedd), 0.1, NoAttenuation)));
+        //this.scene.add(Sphere.newSphere(new Vector3(5, 5, 0), 1, new LightMaterial(Color.hexColor(0xffeedd), 0.1, NoAttenuation)));
 
         this.camera = Camera.lookAt(new Vector3(0, 10, 10), new Vector3(0, 0, 0), new Vector3(0, 1, 0), 45);
 
@@ -60,11 +61,14 @@ export class GIJSView extends GIRenderBase {
             if (obj) {
                 this.scene.add(obj);
 
-                if(!(obj.getMaterial(new Vector3()) instanceof LightMaterial)){
+                if (!(obj.getMaterial(new Vector3()) instanceof LightMaterial)) {
                     if (child.children.length > 0) {
                         this.loadChildren(child);
                     }
                 }
+            }
+            if (child.children.length > 0) {
+                this.loadChildren(child);
             }
         }
     }
@@ -95,33 +99,61 @@ export class GIJSView extends GIRenderBase {
         var normals:Float32Array = geometry.attributes["normal"].array;
         var positions:Float32Array = geometry.attributes["position"].array;
         var triangles:Triangle[] = [];
+        var triCount:number = 0;
+        var indexAttribute = geometry.getIndex();
 
-        if (geometry.attributes["index"]) {
-            var indices:Float32Array = geometry.attributes["index"].array;
+        if (indexAttribute) {
+
+            var indices = indexAttribute.array;
+
             for (var i = 0; i < indices.length; i = i + 3) {
-                var a = indices[i];
-                var b = indices[i+1];
-                var c = indices[i+2];
-                //[....,ax,ay,az, bx,by,bz, cx,xy,xz,....]
-                var  ax = a * 9;
-                var  ay = (a * 9) + 1;
-                var  az = (a * 9) + 2;
-                var  bx = b * 9;
-                var  by = (b * 9) + 1;
-                var  bz = (b * 9) + 2;
-                var  cx = c * 9;
-                var  cy = (c * 9) + 1;
-                var  cz = (c * 9) + 2;
+                var a;
+                var b;
+                var c;
 
+                a = indices[i];
+                 b = indices[i + 1];
+                 c = indices[i + 2];
+
+                /*if (++triCount % 2 !== 0) {
+                    a = indices[i];
+                    b = indices[i + 1];
+                    c = indices[i + 2];
+                } else {
+                    c = indices[i];
+                    b = indices[i + 1];
+                    a = indices[i + 2];
+                }*/
+
+                //[....,ax,ay,az, bx,by,bz, cx,xy,xz,....]
+                var ax = a * 3;
+                var ay = (a * 3) + 1;
+                var az = (a * 3) + 2;
+
+                var bx = b * 3;
+                var by = (b * 3) + 1;
+                var bz = (b * 3) + 2;
+
+                var cx = c * 3;
+                var cy = (c * 3) + 1;
+                var cz = (c * 3) + 2;
 
                 var triangle = new Triangle();
                 triangle.material = material;
                 triangle.v1 = new Vector3(positions[ax], positions[ay], positions[az]);
                 triangle.v2 = new Vector3(positions[bx], positions[by], positions[bz]);
                 triangle.v3 = new Vector3(positions[cx], positions[cy], positions[cz]);
+
+                /*if (++triCount % 2 === 0) {
+                 triangle.n1 = new Vector3(-normals[ax], -normals[ay], -normals[az]);
+                 triangle.n2 = new Vector3(-normals[bx], -normals[by], -normals[bz]);
+                 triangle.n3 = new Vector3(-normals[cx], -normals[cy], -normals[cz]);
+                 } else {*/
                 triangle.n1 = new Vector3(normals[ax], normals[ay], normals[az]);
                 triangle.n2 = new Vector3(normals[bx], normals[by], normals[bz]);
                 triangle.n3 = new Vector3(normals[cx], normals[cy], normals[cz]);
+                //}
+
                 triangle.updateBox();
                 triangle.fixNormals();
                 triangles.push(triangle);
@@ -143,6 +175,7 @@ export class GIJSView extends GIRenderBase {
             }
         }
         var mesh:Mesh = Mesh.newMesh(triangles);
+        mesh.smoothNormals();
         return mesh;
     }
 
@@ -150,7 +183,7 @@ export class GIJSView extends GIRenderBase {
         //console.log(JSON.stringify(this.camera.toJSON()));
         this.camera.p.setFromJson(camera.position);
         this.camera.m = 1 / Math.tan(camera.fov * Math.PI / 360);
-        let e = camera.matrix.elements
+        let e = camera.matrix.elements;
         let x = [-e[0], -e[1], -e[2]];
         let y = [e[4], e[5], e[6]];
         let z = [-e[8], -e[9], -e[10]];
@@ -166,8 +199,9 @@ export class GIJSView extends GIRenderBase {
     }
 
     private static getMaterial(srcMaterial:THREE.Material):Material {
-        var material:Material = new Material(Color.hexColor(srcMaterial.color.getHex()));
-        material.ior = srcMaterial.ior?srcMaterial.ior:1;
+        var material:Material = new DiffuseMaterial(Color.hexColor(srcMaterial.color.getHex()));
+        //var material:Material = new Material(Color.hexColor(srcMaterial.color.getHex()));
+        //material.ior = srcMaterial.ior ? srcMaterial.ior : 1;
         //material.tint = srcMaterial.tint?srcMaterial.tint:0;
         //material.gloss = srcMaterial.gloss?srcMaterial.gloss:0;
         //material.emittance = srcMaterial.emittance?srcMaterial.emittance:0;
@@ -177,10 +211,11 @@ export class GIJSView extends GIRenderBase {
     }
 
     private getLight(src:any):Shape {
-        var lightMesh = src.children[0];
-        var material = new LightMaterial(Color.hexColor(lightMesh.material.color.getHex()), src.intensity, NoAttenuation);
-        var shape:Shape = this.buildGeometry(lightMesh.geometry, material);
+        var material = new LightMaterial(Color.hexColor(src.color.getHex()), src.intensity, new LinearAttenuation(src.distance));
         var mat:Matrix4 = Matrix4.fromTHREEJS(src.matrix.elements);
-        return TransformedShape.newTransformedShape(shape, mat);
+        var sphere = Sphere.newSphere(new Vector3(src.position.x, src.position.y, -src.position.z), 1, material);
+        //this.scene.add(TransformedShape.newTransformedShape(sphere, mat));
+        this.scene.add(sphere);
+        return null;
     }
 }

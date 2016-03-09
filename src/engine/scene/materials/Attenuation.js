@@ -1,6 +1,4 @@
-System.register([], function(exports_1, context_1) {
-    "use strict";
-    var __moduleName = context_1 && context_1.id;
+System.register([], function(exports_1) {
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
@@ -65,7 +63,7 @@ System.register([], function(exports_1, context_1) {
                 };
                 Attenuation.SIZE = 3;
                 return Attenuation;
-            }());
+            })();
             exports_1("Attenuation", Attenuation);
             exports_1("NoAttenuation", NoAttenuation = new Attenuation(1, 0, 0));
             LinearAttenuation = (function (_super) {
@@ -74,7 +72,7 @@ System.register([], function(exports_1, context_1) {
                     _super.call(this, 1, value, 0);
                 }
                 return LinearAttenuation;
-            }(Attenuation));
+            })(Attenuation);
             exports_1("LinearAttenuation", LinearAttenuation);
             QuadraticAttenuation = (function (_super) {
                 __extends(QuadraticAttenuation, _super);
@@ -82,7 +80,7 @@ System.register([], function(exports_1, context_1) {
                     _super.call(this, 1, 0, value);
                 }
                 return QuadraticAttenuation;
-            }(Attenuation));
+            })(Attenuation);
             exports_1("QuadraticAttenuation", QuadraticAttenuation);
         }
     }

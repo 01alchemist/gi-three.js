@@ -1,6 +1,4 @@
-System.register(["./TraceJob"], function(exports_1, context_1) {
-    "use strict";
-    var __moduleName = context_1 && context_1.id;
+System.register(["./TraceJob"], function(exports_1) {
     var TraceJob_1;
     var TraceWorkerManager;
     return {
@@ -111,7 +109,7 @@ System.register(["./TraceJob"], function(exports_1, context_1) {
                 TraceWorkerManager.prototype.workersFinished = function () {
                 };
                 return TraceWorkerManager;
-            }());
+            })();
             exports_1("TraceWorkerManager", TraceWorkerManager);
         }
     }

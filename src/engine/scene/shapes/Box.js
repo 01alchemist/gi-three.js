@@ -1,6 +1,4 @@
-System.register(["../../math/Vector3", "../Axis"], function(exports_1, context_1) {
-    "use strict";
-    var __moduleName = context_1 && context_1.id;
+System.register(["../../math/Vector3", "../Axis"], function(exports_1) {
     var Vector3_1, Axis_1;
     var Box;
     return {
@@ -125,7 +123,7 @@ System.register(["../../math/Vector3", "../Axis"], function(exports_1, context_1
                 };
                 Box.SIZE = Vector3_1.Vector3.SIZE * 2;
                 return Box;
-            }());
+            })();
             exports_1("Box", Box);
         }
     }

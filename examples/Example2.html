@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Threejs Integration</title>
     <script src="uil.js"></script>
-    <script src="../threejs/three.min.js"></script>
+    <script src="../threejs/three.js"></script>
     <script src="../threejs/controls/EditorControls.js"></script>
     <script src="../threejs/loaders/OBJLoader.js"></script>
     <script src="../node_modules/systemjs/dist/system.src.js"></script>
@@ -17,9 +17,12 @@
                     format: 'register',
                     defaultExtension: 'js'
                 }
+            },
+            meta: {
+                "xdata/*": {"format": "register"}
             }
         });
-        System.import('Example2').then(function(module){
+        System.import('Example2').then(function (module) {
             new module.Example1();
         }, console.error.bind(console));
     </script>

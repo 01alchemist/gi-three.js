@@ -1,6 +1,4 @@
-System.register(["./DataCache"], function(exports_1, context_1) {
-    "use strict";
-    var __moduleName = context_1 && context_1.id;
+System.register(["./DataCache"], function(exports_1) {
     var DataCache_1;
     var ImageLoader;
     return {
@@ -42,7 +40,7 @@ System.register(["./DataCache"], function(exports_1, context_1) {
                 };
                 ImageLoader.crossOrigin = "*";
                 return ImageLoader;
-            }());
+            })();
             exports_1("ImageLoader", ImageLoader);
         }
     }

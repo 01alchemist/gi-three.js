@@ -1,6 +1,4 @@
-System.register([], function(exports_1, context_1) {
-    "use strict";
-    var __moduleName = context_1 && context_1.id;
+System.register([], function(exports_1) {
     var Color;
     return {
         setters:[],
@@ -97,7 +95,7 @@ System.register([], function(exports_1, context_1) {
                 };
                 Color.SIZE = 3;
                 return Color;
-            }());
+            })();
             exports_1("Color", Color);
         }
     }

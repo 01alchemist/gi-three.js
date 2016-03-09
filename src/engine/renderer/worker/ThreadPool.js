@@ -1,6 +1,4 @@
-System.register(["./Thread"], function(exports_1, context_1) {
-    "use strict";
-    var __moduleName = context_1 && context_1.id;
+System.register(["./Thread"], function(exports_1) {
     var Thread_1;
     var ThreadPool;
     return {
@@ -33,7 +31,7 @@ System.register(["./Thread"], function(exports_1, context_1) {
                     return threads;
                 };
                 return ThreadPool;
-            }());
+            })();
             exports_1("ThreadPool", ThreadPool);
         }
     }

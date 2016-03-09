@@ -21,7 +21,6 @@
     "xdata": "^2.1.15"
   },
   "devDependencies": {
-    "typescript": "^1.8.2",
-    "typings": "^0.6.8"
+    "typescript": "^1.8.2"
   }
 }

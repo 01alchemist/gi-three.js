@@ -1,6 +1,4 @@
-System.register([], function(exports_1, context_1) {
-    "use strict";
-    var __moduleName = context_1 && context_1.id;
+System.register([], function(exports_1) {
     var MemoryUtils;
     return {
         setters:[],
@@ -232,7 +230,7 @@ System.register([], function(exports_1, context_1) {
                 MemoryUtils.f32mem = new Uint8Array(MemoryUtils.f32.buffer);
                 MemoryUtils.f64mem = new Uint8Array(MemoryUtils.f64.buffer);
                 return MemoryUtils;
-            }());
+            })();
             exports_1("MemoryUtils", MemoryUtils);
         }
     }
