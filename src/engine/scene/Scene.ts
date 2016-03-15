@@ -159,7 +159,7 @@ export class Scene {
             return this.color;
             //return new Color(1,0,0);
         }
-        var info = hit.info(r);
+        var info = hit.getInfo(r);
         var result:Color = new Color();
         if (emission) {
             var emittance = info.material.emittance;

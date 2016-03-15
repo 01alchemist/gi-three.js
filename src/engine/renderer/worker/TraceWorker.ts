@@ -9,7 +9,6 @@ import {DiffuseMaterial} from "../../scene/materials/DiffuseMaterial";
 import {Sphere} from "../../scene/shapes/Sphere";
 import {LightMaterial} from "../../scene/materials/LightMaterial";
 import {LinearAttenuation} from "../../scene/materials/Attenuation";
-import {Renderer} from "../Renderer";
 import {SpecularMaterial} from "../../scene/materials/SpecularMaterial";
 import {SharedScene} from "../../scene/SharedScene";
 import {DirectMemory} from "../../../pointer/DirectMemory";
@@ -198,10 +197,6 @@ export class TraceWorker {
                 c = c.pow(1 / 2.2);
 
                 this.updatePixel(c, screen_index);
-
-                if (Renderer.DEBUG && x == this.xoffset || Renderer.DEBUG && y == this.yoffset) {
-                    this.drawPixelInt(screen_index, 0xFFFF00F);
-                }
             }
         }
         //console.timeEnd("render");

@@ -7,7 +7,7 @@ export class ThreeJSView {
     public camera:THREE.PerspectiveCamera;
     public scene:THREE.Scene;
     public renderer:THREE.WebGLRenderer;
-    public controls:THREE.EditorControls;
+    public controls:any;
 
     public onCameraChange:Function;
 
@@ -31,7 +31,7 @@ export class ThreeJSView {
         //this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         this.container.appendChild(this.renderer.domElement);
 
-        this.controls = new THREE.EditorControls(this.camera, this.container);
+        this.controls = new THREE["EditorControls"](this.camera, this.container);
         this.controls.addEventListener('change', () => {
             this.render();
             if (this.onCameraChange) {

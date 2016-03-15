@@ -220,35 +220,25 @@ System.register(["../materials/Material", "./Box", "../../math/Vector3", "../../
                     configurable: true
                 });
                 Triangle.prototype.intersect = function (r) {
-                    var e1x = this.v2.x - this.v1.x;
-                    var e1y = this.v2.y - this.v1.y;
-                    var e1z = this.v2.z - this.v1.z;
-                    var e2x = this.v3.x - this.v1.x;
-                    var e2y = this.v3.y - this.v1.y;
-                    var e2z = this.v3.z - this.v1.z;
-                    var px = r.direction.y * e2z - r.direction.z * e2y;
-                    var py = r.direction.z * e2x - r.direction.x * e2z;
-                    var pz = r.direction.x * e2y - r.direction.y * e2x;
-                    var det = e1x * px + e1y * py + e1z * pz;
+                    var e1 = this.v2.sub(this.v1);
+                    var e2 = this.v3.sub(this.v1);
+                    var p = r.direction.cross(e2);
+                    var det = e1.dot(p);
                     if (det > -Constants_1.EPS && det < Constants_1.EPS) {
                         return Hit_2.NoHit;
                     }
                     var inv = 1 / det;
-                    var tx = r.origin.x - this.v1.x;
-                    var ty = r.origin.y - this.v1.y;
-                    var tz = r.origin.z - this.v1.z;
-                    var u = (tx * px + ty * py + tz * pz) * inv;
+                    var t = r.origin.sub(this.v1);
+                    var u = t.dot(p) * inv;
                     if (u < 0 || u > 1) {
                         return Hit_2.NoHit;
                     }
-                    var qx = ty * e1z - tz * e1y;
-                    var qy = tz * e1x - tx * e1z;
-                    var qz = tx * e1y - ty * e1x;
-                    var v = (r.direction.x * qx + r.direction.y * qy + r.direction.z * qz) * inv;
+                    var q = t.cross(e1);
+                    var v = r.direction.dot(q) * inv;
                     if (v < 0 || u + v > 1) {
                         return Hit_2.NoHit;
                     }
-                    var d = (e2x * qx + e2y * qy + e2z * qz) * inv;
+                    var d = e2.dot(q) * inv;
                     if (d < Constants_1.EPS) {
                         return Hit_2.NoHit;
                     }

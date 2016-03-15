@@ -12,7 +12,7 @@ export class HttpLoader {
 
         var extension = url.split('.').pop().toLowerCase();
 
-        var arrayBufferResponse = window.fetch(url, {
+        var arrayBufferResponse = fetch(url, {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/octet-stream',

@@ -16,10 +16,12 @@ import {Mesh} from "../src/engine/scene/shapes/Mesh";
 import {Triangle} from "../src/engine/scene/shapes/Triangle";
 import {Material} from "../src/engine/scene/materials/Material";
 import {TransformedShape} from "../src/engine/scene/shapes/TransformedShape";
-import {Matrix4} from "../src/engine/math/Matrix4";
 import {TransparentMaterial} from "../src/engine/scene/materials/TransparentMaterial";
 import {Attenuation} from "../src/engine/scene/materials/Attenuation";
 import {LinearAttenuation} from "../src/engine/scene/materials/Attenuation";
+import {TMatrix4} from "../src/engine/math/TMatrix4";
+import {MathUtils} from "../src/engine/utils/MathUtils";
+import {Matrix4} from "../src/engine/math/Matrix4";
 
 /**
  * Created by Nidin Vinayakan on 27-02-2016.
@@ -41,7 +43,7 @@ export class GIJSView extends GIRenderBase {
 
         this.cameraSamples = -1;
         this.hitSamples = 1;
-        this.bounces = 4;
+        this.bounces = 0;
         this.iterations = 1000000;
         this.blockIterations = 1;
     }
@@ -60,27 +62,32 @@ export class GIJSView extends GIRenderBase {
             var obj:Shape = this.buildSceneObject(child);
             if (obj) {
                 this.scene.add(obj);
-
-                if (!(obj.getMaterial(new Vector3()) instanceof LightMaterial)) {
-                    if (child.children.length > 0) {
-                        this.loadChildren(child);
-                    }
-                }
             }
-            if (child.children.length > 0) {
-                this.loadChildren(child);
+            if (obj) {
+                if (!(obj.getMaterial(new Vector3()) instanceof LightMaterial) && child.children.length > 0) {
+                    this.loadChildren(child);
+                }
+            } else {
+                if (child.children.length > 0) {
+                    this.loadChildren(child);
+                }
             }
         }
     }
 
+    identityMatrix = new THREE.Matrix4().identity();
     private buildSceneObject(src):Shape {
 
         switch (src.type) {
             case ThreeObjects.Mesh:
                 var material = GIJSView.getMaterial(src.material);
                 var shape:Shape = this.buildGeometry(src.geometry, material);
-                var mat:Matrix4 = Matrix4.fromTHREEJS(src.matrix.elements);
-                return TransformedShape.newTransformedShape(shape, mat);
+                if(src.matrix.equals(this.identityMatrix)){
+                    return shape;
+                }else {
+                    var mat:Matrix4 = Matrix4.fromTHREEJS(src.matrix.elements);
+                    return TransformedShape.newTransformedShape(shape, mat);
+                }
 
             case ThreeObjects.PointLight:
                 return this.getLight(src);
@@ -90,92 +97,127 @@ export class GIJSView extends GIRenderBase {
         return null;
     }
 
-    private buildGeometry(geometry:THREE.BufferGeometry, material:Material):Shape {
+    private buildGeometry(geometry:THREE.BufferGeometry|any, material:Material):Shape {
 
-        if (geometry._bufferGeometry) {
-            geometry = geometry._bufferGeometry;
+        if (geometry["_bufferGeometry"]) {
+            geometry = geometry["_bufferGeometry"];
         }
 
-        var normals:Float32Array = geometry.attributes["normal"].array;
-        var positions:Float32Array = geometry.attributes["position"].array;
         var triangles:Triangle[] = [];
-        var triCount:number = 0;
-        var indexAttribute = geometry.getIndex();
 
-        if (indexAttribute) {
+        if (!geometry.attributes) {
 
-            var indices = indexAttribute.array;
+            var vertices = geometry.vertices;
+            var faces = geometry.faces;
+            if (vertices && faces) {
+                for (var i = 0; i < faces.length; i++) {
+                    var face = faces[i];
 
-            for (var i = 0; i < indices.length; i = i + 3) {
-                var a;
-                var b;
-                var c;
-
-                a = indices[i];
-                 b = indices[i + 1];
-                 c = indices[i + 2];
-
-                /*if (++triCount % 2 !== 0) {
-                    a = indices[i];
-                    b = indices[i + 1];
-                    c = indices[i + 2];
-                } else {
-                    c = indices[i];
-                    b = indices[i + 1];
-                    a = indices[i + 2];
-                }*/
-
-                //[....,ax,ay,az, bx,by,bz, cx,xy,xz,....]
-                var ax = a * 3;
-                var ay = (a * 3) + 1;
-                var az = (a * 3) + 2;
-
-                var bx = b * 3;
-                var by = (b * 3) + 1;
-                var bz = (b * 3) + 2;
-
-                var cx = c * 3;
-                var cy = (c * 3) + 1;
-                var cz = (c * 3) + 2;
-
-                var triangle = new Triangle();
-                triangle.material = material;
-                triangle.v1 = new Vector3(positions[ax], positions[ay], positions[az]);
-                triangle.v2 = new Vector3(positions[bx], positions[by], positions[bz]);
-                triangle.v3 = new Vector3(positions[cx], positions[cy], positions[cz]);
-
-                /*if (++triCount % 2 === 0) {
-                 triangle.n1 = new Vector3(-normals[ax], -normals[ay], -normals[az]);
-                 triangle.n2 = new Vector3(-normals[bx], -normals[by], -normals[bz]);
-                 triangle.n3 = new Vector3(-normals[cx], -normals[cy], -normals[cz]);
-                 } else {*/
-                triangle.n1 = new Vector3(normals[ax], normals[ay], normals[az]);
-                triangle.n2 = new Vector3(normals[bx], normals[by], normals[bz]);
-                triangle.n3 = new Vector3(normals[cx], normals[cy], normals[cz]);
-                //}
-
-                triangle.updateBox();
-                triangle.fixNormals();
-                triangles.push(triangle);
+                    var triangle = new Triangle();
+                    triangle.material = material;
+                    triangle.v1 = new Vector3(vertices[face.a].x, vertices[face.a].y, vertices[face.a].z);
+                    triangle.v2 = new Vector3(vertices[face.b].x, vertices[face.b].y, vertices[face.b].z);
+                    triangle.v3 = new Vector3(vertices[face.c].x, vertices[face.c].y, vertices[face.c].z);
+                    triangle.n1 = new Vector3();
+                    triangle.n2 = new Vector3();
+                    triangle.n3 = new Vector3();
+                    triangle.updateBox();
+                    triangle.fixNormals();
+                    triangles.push(triangle);
+                }
+            } else {
+                return null;
             }
 
         } else {
-            for (var i = 0; i < positions.length; i = i + 9) {
-                var triangle = new Triangle();
-                triangle.material = material;
-                triangle.v1 = new Vector3(positions[i], positions[i + 1], positions[i + 2]);
-                triangle.v2 = new Vector3(positions[i + 3], positions[i + 4], positions[i + 5]);
-                triangle.v3 = new Vector3(positions[i + 6], positions[i + 7], positions[i + 8]);
-                triangle.n1 = new Vector3(normals[i], normals[i + 1], normals[i + 2]);
-                triangle.n2 = new Vector3(normals[i + 3], normals[i + 4], normals[i + 5]);
-                triangle.n3 = new Vector3(normals[i + 6], normals[i + 7], normals[i + 8]);
-                triangle.updateBox();
-                triangle.fixNormals();
-                triangles.push(triangle);
+            var normals:Float32Array = geometry.attributes["normal"].array;
+            var positions:Float32Array = geometry.attributes["position"].array;
+            var triCount:number = 0;
+            var indexAttribute = geometry.getIndex();
+
+            if (indexAttribute) {
+
+                var indices = indexAttribute.array;
+
+                for (var i = 0; i < indices.length; i = i + 3) {
+
+                    triCount++;
+
+                    var a;
+                    var b;
+                    var c;
+
+                    a = indices[i];
+                    b = indices[i + 1];
+                    c = indices[i + 2];
+
+                    if (triCount % 2 === 0) {
+                        a = indices[i];
+                        b = indices[i + 1];
+                        c = indices[i + 2];
+                    } else {
+                        c = indices[i];
+                        b = indices[i + 1];
+                        a = indices[i + 2];
+                    }
+
+                    //[....,ax,ay,az, bx,by,bz, cx,xy,xz,....]
+                    var ax = a * 3;
+                    var ay = (a * 3) + 1;
+                    var az = (a * 3) + 2;
+
+                    var bx = b * 3;
+                    var by = (b * 3) + 1;
+                    var bz = (b * 3) + 2;
+
+                    var cx = c * 3;
+                    var cy = (c * 3) + 1;
+                    var cz = (c * 3) + 2;
+
+                    var triangle = new Triangle();
+                    triangle.material = material;
+                    triangle.v1 = new Vector3(positions[ax], positions[ay], positions[az]);
+                    triangle.v2 = new Vector3(positions[bx], positions[by], positions[bz]);
+                    triangle.v3 = new Vector3(positions[cx], positions[cy], positions[cz]);
+
+                    /*if (triCount % 2 !== 0) {
+                     triangle.n3 = new Vector3(normals[ax], normals[ay], normals[az]);
+                     triangle.n2 = new Vector3(normals[bx], normals[by], normals[bz]);
+                     triangle.n1 = new Vector3(normals[cx], normals[cy], normals[cz]);
+                     } else {
+                     triangle.n1 = new Vector3(normals[ax], normals[ay], normals[az]);
+                     triangle.n2 = new Vector3(normals[bx], normals[by], normals[bz]);
+                     triangle.n3 = new Vector3(normals[cx], normals[cy], normals[cz]);
+                     }*/
+
+                    triangle.n1 = new Vector3(normals[ax], normals[ay], normals[az]);
+                    triangle.n2 = new Vector3(normals[bx], normals[by], normals[bz]);
+                    triangle.n3 = new Vector3(normals[cx], normals[cy], normals[cz]);
+
+                    triangle.updateBox();
+                    triangle.fixNormals();
+                    triangles.push(triangle);
+                }
+
+            } else {
+                for (var i = 0; i < positions.length; i = i + 9) {
+                    var triangle = new Triangle();
+                    triangle.material = material;
+                    triangle.v1 = new Vector3(positions[i], positions[i + 1], positions[i + 2]);
+                    triangle.v2 = new Vector3(positions[i + 3], positions[i + 4], positions[i + 5]);
+                    triangle.v3 = new Vector3(positions[i + 6], positions[i + 7], positions[i + 8]);
+                    triangle.n1 = new Vector3(normals[i], normals[i + 1], normals[i + 2]);
+                    triangle.n2 = new Vector3(normals[i + 3], normals[i + 4], normals[i + 5]);
+                    triangle.n3 = new Vector3(normals[i + 6], normals[i + 7], normals[i + 8]);
+                    triangle.updateBox();
+                    triangle.fixNormals();
+                    triangles.push(triangle);
+                }
             }
         }
+
         var mesh:Mesh = Mesh.newMesh(triangles);
-        mesh.smoothNormals();
+        //mesh.smoothNormals();
         return mesh;
     }
 
@@ -198,7 +240,7 @@ export class GIJSView extends GIRenderBase {
         }
     }
 
-    private static getMaterial(srcMaterial:THREE.Material):Material {
+    private static getMaterial(srcMaterial:any):Material {
         var material:Material = new DiffuseMaterial(Color.hexColor(srcMaterial.color.getHex()));
         //var material:Material = new Material(Color.hexColor(srcMaterial.color.getHex()));
         //material.ior = srcMaterial.ior ? srcMaterial.ior : 1;
@@ -212,10 +254,9 @@ export class GIJSView extends GIRenderBase {
 
     private getLight(src:any):Shape {
         var material = new LightMaterial(Color.hexColor(src.color.getHex()), src.intensity, new LinearAttenuation(src.distance));
-        var mat:Matrix4 = Matrix4.fromTHREEJS(src.matrix.elements);
+        var mat:TMatrix4 = new TMatrix4(src.matrix);
         var sphere = Sphere.newSphere(new Vector3(src.position.x, src.position.y, -src.position.z), 1, material);
         //this.scene.add(TransformedShape.newTransformedShape(sphere, mat));
-        this.scene.add(sphere);
-        return null;
+        return sphere;
     }
 }

@@ -1,16 +1,19 @@
-System.register(["../../math/Matrix4", "../../math/Hit", "./Shape"], function(exports_1) {
-    var Matrix4_1, Hit_1, Shape_1;
+System.register(["../../math/Ray", "./Shape", "../../math/Matrix4", "../../math/HitInfo"], function(exports_1) {
+    var Ray_1, Shape_1, Matrix4_1, HitInfo_1;
     var TransformedShape;
     return {
         setters:[
-            function (Matrix4_1_1) {
-                Matrix4_1 = Matrix4_1_1;
-            },
-            function (Hit_1_1) {
-                Hit_1 = Hit_1_1;
+            function (Ray_1_1) {
+                Ray_1 = Ray_1_1;
             },
             function (Shape_1_1) {
                 Shape_1 = Shape_1_1;
+            },
+            function (Matrix4_1_1) {
+                Matrix4_1 = Matrix4_1_1;
+            },
+            function (HitInfo_1_1) {
+                HitInfo_1 = HitInfo_1_1;
             }],
         execute: function() {
             TransformedShape = (function () {
@@ -22,6 +25,7 @@ System.register(["../../math/Matrix4", "../../math/Hit", "./Shape"], function(ex
                     this.matrix = matrix;
                     this.inverse = inverse;
                     this.type = Shape_1.ShapeType.TRANSFORMED_SHAPE;
+                    this.invTranspose = inverse.transpose();
                 }
                 Object.defineProperty(TransformedShape.prototype, "memorySize", {
                     get: function () {
@@ -39,6 +43,7 @@ System.register(["../../math/Matrix4", "../../math/Hit", "./Shape"], function(ex
                 TransformedShape.prototype.directRead = function (memory, offset) {
                     offset = this.matrix.directRead(memory, offset);
                     this.inverse = this.matrix.inverse();
+                    this.invTranspose = this.inverse.transpose();
                     var container = [];
                     offset = Shape_1.directRestoreShape(memory, offset, container);
                     this.shape = container[0];
@@ -54,6 +59,7 @@ System.register(["../../math/Matrix4", "../../math/Hit", "./Shape"], function(ex
                 TransformedShape.prototype.read = function (memory) {
                     this.matrix.read(memory);
                     this.inverse = this.matrix.inverse();
+                    this.invTranspose = this.inverse.transpose();
                     var container = [];
                     Shape_1.restoreShape(memory, container);
                     this.shape = container[0];
@@ -83,12 +89,28 @@ System.register(["../../math/Matrix4", "../../math/Hit", "./Shape"], function(ex
                     this.shape.compile();
                 };
                 TransformedShape.prototype.intersect = function (r) {
-                    var hit = this.shape.intersect(this.inverse.mulRay(r));
+                    var shapeRay = this.inverse.mulRay(r);
+                    var hit = this.shape.intersect(shapeRay);
                     if (!hit.ok()) {
                         return hit;
                     }
-                    var shape = new TransformedShape(hit.shape, this.matrix, this.inverse);
-                    return new Hit_1.Hit(shape, hit.T);
+                    var shape = hit.shape;
+                    var shapePosition = shapeRay.position(hit.T);
+                    var shapeNormal = shape.getNormal(shapePosition);
+                    var position = this.matrix.mulPosition(shapePosition);
+                    var normal = this.invTranspose.mulDirection(shapeNormal);
+                    var color = shape.getColor(shapePosition);
+                    var material = shape.getMaterial(shapePosition);
+                    var inside = false;
+                    if (shapeNormal.dot(shapeRay.direction) > 0) {
+                        normal = normal.mulScalar(-1);
+                        inside = true;
+                    }
+                    var ray = new Ray_1.Ray(position, normal);
+                    var info = new HitInfo_1.HitInfo(shape, position, normal, ray, color, material, inside);
+                    hit.T = position.sub(r.origin).length();
+                    hit.info = info;
+                    return hit;
                 };
                 TransformedShape.prototype.getColor = function (p) {
                     return this.shape.getColor(this.inverse.mulPosition(p));
@@ -97,10 +119,12 @@ System.register(["../../math/Matrix4", "../../math/Hit", "./Shape"], function(ex
                     return this.shape.getMaterial(this.inverse.mulPosition(p));
                 };
                 TransformedShape.prototype.getNormal = function (p) {
-                    return this.matrix.mulDirection(this.shape.getNormal(this.inverse.mulPosition(p)));
+                    console.log("getNormal");
+                    return null;
                 };
                 TransformedShape.prototype.getRandomPoint = function () {
-                    return this.matrix.mulPosition(this.shape.getRandomPoint());
+                    console.log("getRandomPoint");
+                    return null;
                 };
                 return TransformedShape;
             })();

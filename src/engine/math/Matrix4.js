@@ -164,6 +164,14 @@ System.register(["./Vector3", "../scene/shapes/Box", "./Ray"], function(exports_
                     var xmax = ymax * aspect;
                     return Matrix4.frustum(-xmax, xmax, -ymax, ymax, near, far);
                 };
+                Matrix4.LookAtMatrix = function (eye, center, up, fovy) {
+                    up = up.normalize();
+                    var f = center.sub(eye).normalize();
+                    var s = f.cross(up);
+                    var u = s.cross(f);
+                    var m = new Matrix4(s.x, u.x, -f.x, eye.x, s.y, u.y, -f.y, eye.y, s.z, u.z, -f.z, eye.z, 0, 0, 0, 1);
+                    return m.inverse();
+                };
                 Matrix4.prototype.translate = function (v) {
                     return Matrix4.translate(v).mul(this);
                 };
@@ -221,28 +229,26 @@ System.register(["./Vector3", "../scene/shapes/Box", "./Ray"], function(exports_
                     var a = this;
                     return new Ray_1.Ray(a.mulPosition(b.origin), a.mulDirection(b.direction));
                 };
-                Matrix4.prototype.mulBox = function (b) {
+                Matrix4.prototype.mulBox = function (box) {
                     var a = this;
-                    var minx = b.min.x;
-                    var maxx = b.max.x;
-                    var miny = b.min.y;
-                    var maxy = b.max.y;
-                    var minz = b.min.z;
-                    var maxz = b.max.z;
-                    var xa = a.x00 * minx + a.x10 * minx + a.x20 * minx + a.x30 * minx;
-                    var xb = a.x00 * maxx + a.x10 * maxx + a.x20 * maxx + a.x30 * maxx;
-                    var ya = a.x01 * miny + a.x11 * miny + a.x21 * miny + a.x31 * miny;
-                    var yb = a.x01 * maxy + a.x11 * maxy + a.x21 * maxy + a.x31 * maxy;
-                    var za = a.x02 * minz + a.x12 * minz + a.x22 * minz + a.x32 * minz;
-                    var zb = a.x02 * maxz + a.x12 * maxz + a.x22 * maxz + a.x32 * maxz;
-                    minx = Math.min(xa, xb);
-                    maxx = Math.max(xa, xb);
-                    miny = Math.min(ya, yb);
-                    maxy = Math.max(ya, yb);
-                    minz = Math.min(za, zb);
-                    maxz = Math.max(za, zb);
-                    var min = new Vector3_1.Vector3(minx + a.x03, miny + a.x13, minz + a.x23);
-                    var max = new Vector3_1.Vector3(maxx + a.x03, maxy + a.x13, maxz + a.x23);
+                    var r = new Vector3_1.Vector3(a.x00, a.x10, a.x20);
+                    var u = new Vector3_1.Vector3(a.x01, a.x11, a.x21);
+                    var b = new Vector3_1.Vector3(a.x02, a.x12, a.x22);
+                    var t = new Vector3_1.Vector3(a.x03, a.x13, a.x23);
+                    var xa = r.mulScalar(box.min.x);
+                    var xb = r.mulScalar(box.max.x);
+                    var ya = u.mulScalar(box.min.y);
+                    var yb = u.mulScalar(box.max.y);
+                    var za = b.mulScalar(box.min.z);
+                    var zb = b.mulScalar(box.max.z);
+                    xa = xa.min(xb);
+                    xb = xa.max(xb);
+                    ya = ya.min(yb);
+                    yb = ya.max(yb);
+                    za = za.min(zb);
+                    zb = za.max(zb);
+                    var min = xa.add(ya).add(za).add(t);
+                    var max = xb.add(yb).add(zb).add(t);
                     return new Box_1.Box(min, max);
                 };
                 Matrix4.prototype.transpose = function () {

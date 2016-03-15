@@ -182,6 +182,20 @@ export class Matrix4 {
         return Matrix4.frustum(-xmax, xmax, -ymax, ymax, near, far);
     }
 
+    static LookAtMatrix(eye:Vector3, center:Vector3, up:Vector3, fovy:number):Matrix4 {
+        up = up.normalize();
+        var f:Vector3 = center.sub(eye).normalize();
+        var s:Vector3 = f.cross(up);
+        var u:Vector3 = s.cross(f);
+        var m:Matrix4 = new Matrix4(
+            s.x, u.x, -f.x, eye.x,
+            s.y, u.y, -f.y, eye.y,
+            s.z, u.z, -f.z, eye.z,
+            0, 0, 0, 1
+        );
+        return m.inverse()
+    }
+
     translate(v:Vector3):Matrix4 {
         return Matrix4.translate(v).mul(this);
     }
@@ -249,29 +263,27 @@ export class Matrix4 {
         return new Ray(a.mulPosition(b.origin), a.mulDirection(b.direction));
     }
 
-    mulBox(b:Box):Box {
+    mulBox(box:Box):Box {
         // http://dev.theomader.com/transform-bounding-boxes/
         var a:Matrix4 = this;
-        var minx = b.min.x;
-        var maxx = b.max.x;
-        var miny = b.min.y;
-        var maxy = b.max.y;
-        var minz = b.min.z;
-        var maxz = b.max.z;
-        var xa = a.x00 * minx + a.x10 * minx + a.x20 * minx + a.x30 * minx;
-        var xb = a.x00 * maxx + a.x10 * maxx + a.x20 * maxx + a.x30 * maxx;
-        var ya = a.x01 * miny + a.x11 * miny + a.x21 * miny + a.x31 * miny;
-        var yb = a.x01 * maxy + a.x11 * maxy + a.x21 * maxy + a.x31 * maxy;
-        var za = a.x02 * minz + a.x12 * minz + a.x22 * minz + a.x32 * minz;
-        var zb = a.x02 * maxz + a.x12 * maxz + a.x22 * maxz + a.x32 * maxz;
-        minx = Math.min(xa, xb);
-        maxx = Math.max(xa, xb);
-        miny = Math.min(ya, yb);
-        maxy = Math.max(ya, yb);
-        minz = Math.min(za, zb);
-        maxz = Math.max(za, zb);
-        var min:Vector3 = new Vector3(minx + a.x03, miny + a.x13, minz + a.x23);
-        var max:Vector3 = new Vector3(maxx + a.x03, maxy + a.x13, maxz + a.x23);
+        var r:Vector3 = new Vector3(a.x00, a.x10, a.x20);
+        var u:Vector3 = new Vector3(a.x01, a.x11, a.x21);
+        var b:Vector3 = new Vector3(a.x02, a.x12, a.x22);
+        var t:Vector3 = new Vector3(a.x03, a.x13, a.x23);
+        var xa:Vector3 = r.mulScalar(box.min.x);
+        var xb:Vector3 = r.mulScalar(box.max.x);
+        var ya:Vector3 = u.mulScalar(box.min.y);
+        var yb:Vector3 = u.mulScalar(box.max.y);
+        var za:Vector3 = b.mulScalar(box.min.z);
+        var zb:Vector3 = b.mulScalar(box.max.z);
+        xa = xa.min(xb);
+        xb = xa.max(xb);
+        ya = ya.min(yb);
+        yb = ya.max(yb);
+        za = za.min(zb);
+        zb = za.max(zb);
+        var min:Vector3 = xa.add(ya).add(za).add(t);
+        var max:Vector3 = xb.add(yb).add(zb).add(t);
         return new Box(min, max);
     }
 

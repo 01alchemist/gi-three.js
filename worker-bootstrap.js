@@ -1,6 +1,7 @@
 importScripts(
     "node_modules/systemjs/dist/system.src.js",
-    "build/gi-three.js"
+    /*"build/gi-three.js",*/
+    "threejs/three.js"
 );
 
 System.config({

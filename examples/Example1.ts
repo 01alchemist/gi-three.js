@@ -34,8 +34,8 @@ export class Example1 extends GUI {
         var pointLight = new THREE.PointLight(color, 1, 30);
         pointLight.position.set(5, 5, 0);
         pointLight.castShadow = true;
-        pointLight.shadow.camera.near = 1;
-        pointLight.shadow.camera.far = 300;
+        pointLight.shadow.camera["near"] = 1;
+        pointLight.shadow.camera["far"] = 300;
         pointLight.shadow.bias = 0.01;
 
         //this.threeJSView.scene.add(new THREE.CameraHelper(pointLight.shadow.camera));
@@ -43,7 +43,7 @@ export class Example1 extends GUI {
         var geometry:any  = new THREE.SphereGeometry(1, 32, 32);
         var material:any  = new THREE.MeshBasicMaterial({color: color});
         var sphere = new THREE.Mesh(geometry, material);
-        pointLight.add(sphere);
+        //pointLight.add(sphere);
 
         this.threeJSView.scene.add(pointLight);
 
@@ -71,7 +71,7 @@ export class Example1 extends GUI {
         mesh.receiveShadow = true;
         this.threeJSView.scene.add(mesh);
 
-        var loader = new THREE.OBJLoader(manager);
+        var loader = new THREE["OBJLoader"](manager);
         loader.load('../models/teapot.obj', function (object) {
         //loader.load('../models/dragon.obj', function (object) {
         //loader.load('../models/emerald.obj', function (object) {

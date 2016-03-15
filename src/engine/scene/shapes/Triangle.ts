@@ -225,87 +225,71 @@ export class Triangle implements Shape {
     }
 
     intersect(r:Ray):Hit {
-        /*"use asm"
-        var f4 = SIMD.Float32x4;
-         var f4add = f4.add;
-         var f4sub = f4.sub;
-         var f4mul = f4.mul;
-         //var f4div = f4.div;
 
-         //SIMD method
-         var tmp = new Float32Array(9);
+        //Möller–Trumbore intersection algorithm
 
-         var v1 = f4.load3(this.data, 0);
-         var v2 = f4.load3(this.data, 3);
-         var v3 = f4.load3(this.data, 6);
+        //Find vectors for two edges sharing V1
+        //var e1x:number = this.v2.x - this.v1.x;
+        //var e1y:number = this.v2.y - this.v1.y;
+        //var e1z:number = this.v2.z - this.v1.z;
+        //var e2x:number = this.v3.x - this.v1.x;
+        //var e2y:number = this.v3.y - this.v1.y;
+        //var e2z:number = this.v3.z - this.v1.z;
 
-         var e1 = f4sub(v2, v1);
-         var e2 = f4sub(v3, v1);
+        //Edge1
+        var e1:Vector3 = this.v2.sub(this.v1);
+        //Edge2
+        var e2:Vector3 = this.v3.sub(this.v1);
 
-         f4.store3(tmp, 0, e1);
-         f4.store3(tmp, 3, e2);
-
-        var px:number = r.direction.y * tmp[5] - r.direction.z * tmp[4];
-        var py:number = r.direction.z * tmp[3] - r.direction.x * tmp[5];
-        var pz:number = r.direction.x * tmp[4] - r.direction.y * tmp[3];
-
-        var det:number = tmp[0] * px + tmp[1] * py + tmp[2] * pz;
+        //Begin calculating determinant - also used to calculate u parameter
+        var p:Vector3 = r.direction.cross(e2);
+        //var px:number = r.direction.y * e2z - r.direction.z * e2y;
+        //var py:number = r.direction.z * e2x - r.direction.x * e2z;
+        //var pz:number = r.direction.x * e2y - r.direction.y * e2x;
+        //if determinant is near zero, ray lies in plane of triangle
+        //var det:number = e1x * px + e1y * py + e1z * pz;
+        var det:number = e1.dot(p);
+        //NOT CULLING
         if (det > -EPS && det < EPS) {
             return NoHit;
         }
         var inv:number = 1 / det;
-        var tx:number = r.origin.x - this.v1.x;
-        var ty:number = r.origin.y - this.v1.y;
-        var tz:number = r.origin.z - this.v1.z;
-        var u:number = (tx * px + ty * py + tz * pz) * inv;
-        if (u < 0 || u > 1) {
-            return NoHit;
-        }
-        var qx:number = ty * tmp[2] - tz * tmp[1];
-        var qy:number = tz * tmp[0] - tx * tmp[2];
-        var qz:number = tx * tmp[1] - ty * tmp[0];
-        var v:number = (r.direction.x * qx + r.direction.y * qy + r.direction.z * qz) * inv;
-        if (v < 0 || u + v > 1) {
-            return NoHit;
-        }
-        var d:number = (tmp[3] * qx + tmp[4] * qy + tmp[5] * qz) * inv;
-        if (d < EPS) {
-            return NoHit
-        }*/
 
-        var e1x:number = this.v2.x - this.v1.x;
-        var e1y:number = this.v2.y - this.v1.y;
-        var e1z:number = this.v2.z - this.v1.z;
-        var e2x:number = this.v3.x - this.v1.x;
-        var e2y:number = this.v3.y - this.v1.y;
-        var e2z:number = this.v3.z - this.v1.z;
-        var px:number = r.direction.y * e2z - r.direction.z * e2y;
-        var py:number = r.direction.z * e2x - r.direction.x * e2z;
-        var pz:number = r.direction.x * e2y - r.direction.y * e2x;
-        var det:number = e1x * px + e1y * py + e1z * pz;
-        if (det > -EPS && det < EPS) {
-            return NoHit;
-        }
-        var inv:number = 1 / det;
-        var tx:number = r.origin.x - this.v1.x;
-        var ty:number = r.origin.y - this.v1.y;
-        var tz:number = r.origin.z - this.v1.z;
-        var u:number = (tx * px + ty * py + tz * pz) * inv;
+        //calculate distance from V1 to ray origin
+        var t:Vector3 = r.origin.sub(this.v1);
+        //var tx:number = r.origin.x - this.v1.x;
+        //var ty:number = r.origin.y - this.v1.y;
+        //var tz:number = r.origin.z - this.v1.z;
+
+        //Calculate u parameter and test bound
+        //var u:number = (tx * px + ty * py + tz * pz) * inv;
+        var u:number = t.dot(p) * inv;
+        //The intersection lies outside of the triangle
         if (u < 0 || u > 1) {
             return NoHit;
         }
-        var qx:number = ty * e1z - tz * e1y;
-        var qy:number = tz * e1x - tx * e1z;
-        var qz:number = tx * e1y - ty * e1x;
-        var v:number = (r.direction.x * qx + r.direction.y * qy + r.direction.z * qz) * inv;
+
+        //Prepare to test v parameter
+        //var qx:number = ty * e1z - tz * e1y;
+        //var qy:number = tz * e1x - tx * e1z;
+        //var qz:number = tx * e1y - ty * e1x;
+        var q:Vector3 = t.cross(e1);
+
+        //Calculate V parameter and test bound
+        //var v:number = (r.direction.x * qx + r.direction.y * qy + r.direction.z * qz) * inv;
+        var v:number = r.direction.dot(q) * inv;
+        //The intersection lies outside of the triangle
         if (v < 0 || u + v > 1) {
             return NoHit;
         }
-        var d:number = (e2x * qx + e2y * qy + e2z * qz) * inv;
+
+        //var d:number = (e2x * qx + e2y * qy + e2z * qz) * inv;
+        var d:number = e2.dot(q) * inv;
         if (d < EPS) {
             return NoHit
         }
 
+        //ray intersection
         return new Hit(this, d);
     }
 

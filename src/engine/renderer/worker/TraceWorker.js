@@ -1,5 +1,5 @@
-System.register(["../../scene/Camera", "../../math/Color", "../Renderer", "../../scene/SharedScene", "../../../pointer/DirectMemory"], function(exports_1) {
-    var Camera_1, Color_1, Renderer_1, SharedScene_1, DirectMemory_1;
+System.register(["../../scene/Camera", "../../math/Color", "../../scene/SharedScene", "../../../pointer/DirectMemory"], function(exports_1) {
+    var Camera_1, Color_1, SharedScene_1, DirectMemory_1;
     var TraceWorker;
     return {
         setters:[
@@ -8,9 +8,6 @@ System.register(["../../scene/Camera", "../../math/Color", "../Renderer", "../..
             },
             function (Color_1_1) {
                 Color_1 = Color_1_1;
-            },
-            function (Renderer_1_1) {
-                Renderer_1 = Renderer_1_1;
             },
             function (SharedScene_1_1) {
                 SharedScene_1 = SharedScene_1_1;
@@ -139,9 +136,6 @@ System.register(["../../scene/Camera", "../../math/Color", "../Renderer", "../..
                             }
                             c = c.pow(1 / 2.2);
                             this.updatePixel(c, screen_index);
-                            if (Renderer_1.Renderer.DEBUG && x == this.xoffset || Renderer_1.Renderer.DEBUG && y == this.yoffset) {
-                                this.drawPixelInt(screen_index, 0xFFFF00F);
-                            }
                         }
                     }
                 };

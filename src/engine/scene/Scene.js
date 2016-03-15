@@ -149,7 +149,7 @@ System.register(["../math/Color", "./tree/Tree", "../utils/MapUtils", "../math/V
                     if (!hit.ok()) {
                         return this.color;
                     }
-                    var info = hit.info(r);
+                    var info = hit.getInfo(r);
                     var result = new Color_1.Color();
                     if (emission) {
                         var emittance = info.material.emittance;

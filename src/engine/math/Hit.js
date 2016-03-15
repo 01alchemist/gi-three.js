@@ -14,14 +14,18 @@ System.register(["./Constants", "./HitInfo", "./Ray"], function(exports_1) {
             }],
         execute: function() {
             Hit = (function () {
-                function Hit(shape, T) {
+                function Hit(shape, T, info) {
                     this.shape = shape;
                     this.T = T;
+                    this.info = info;
                 }
                 Hit.prototype.ok = function () {
                     return this.T < Constants_1.INF;
                 };
-                Hit.prototype.info = function (ray) {
+                Hit.prototype.getInfo = function (ray) {
+                    if (this.info) {
+                        return this.info;
+                    }
                     var shape = this.shape;
                     var position = ray.position(this.T);
                     var normal = shape.getNormal(position);
@@ -33,7 +37,8 @@ System.register(["./Constants", "./HitInfo", "./Ray"], function(exports_1) {
                         inside = true;
                     }
                     ray = new Ray_1.Ray(position, normal);
-                    return new HitInfo_1.HitInfo(shape, position, normal, ray, color, material, inside);
+                    this.info = new HitInfo_1.HitInfo(shape, position, normal, ray, color, material, inside);
+                    return this.info;
                 };
                 return Hit;
             })();

@@ -29,15 +29,15 @@ export class Example1 extends GUI {
         //var directionalLight = new THREE.DirectionalLight(0xffeedd, 1);
         //directionalLight.castShadow = true;
         //directionalLight.position.set(0, 1, 0);
-        //this.scene.add(directionalLight);
+        //this.threeJSView.scene.add(directionalLight);
 
         var color = 0xffeedd;
 
         var pointLight = new THREE.PointLight(color, 1, 30);
         pointLight.position.set(5, 5, 0);
         pointLight.castShadow = true;
-        pointLight.shadow.camera.near = 1;
-        pointLight.shadow.camera.far = 300;
+        pointLight.shadow.camera["near"] = 1;
+        pointLight.shadow.camera["far"] = 300;
         pointLight.shadow.bias = 0.01;
 
         //this.threeJSView.scene.add(new THREE.CameraHelper(pointLight.shadow.camera));
@@ -45,7 +45,7 @@ export class Example1 extends GUI {
         var geometry:any = new THREE.SphereGeometry(1, 32, 32);
         var material:any = new THREE.MeshBasicMaterial({color: color});
         var sphere = new THREE.Mesh(geometry, material);
-        //pointLight.add(sphere);
+        pointLight.add(sphere);
 
         this.threeJSView.scene.add(pointLight);
 
@@ -67,6 +67,7 @@ export class Example1 extends GUI {
 
         geometry = new THREE.PlaneGeometry(100, 100);
         material = new THREE.MeshPhongMaterial({color: 0xffffff});
+        material.side = THREE.DoubleSide;
         var mesh = new THREE.Mesh(geometry, material);
         //mesh.rotation.set(MathUtils.radians(-90), 0, 0);
         var rotmat = new THREE.Matrix4().makeRotationX(MathUtils.radians(-90));
@@ -94,13 +95,13 @@ export class Example1 extends GUI {
                     //mat.makeRotationAxis(new THREE.Vector3(1,0,0), MathUtils.radians(-90));
                     var rotmat = new THREE.Matrix4().makeRotationX(MathUtils.radians(-90));
                     var scalemat = new THREE.Matrix4().makeScale(0.03, 0.03, 0.03);
-                    child.applyMatrix(rotmat.multiply(scalemat));
+                    child.applyMatrix(scalemat.multiply(rotmat));
                     //child.applyMatrix(scalemat);
                     //child.scale.set(0.03, 0.03, 0.03);
                     //child.rotation.set(MathUtils.radians(-90), 0, 0);
                 }
             });
-            //self.threeJSView.scene.add(object);
+            self.threeJSView.scene.add(object);
             self.giJSView.setThreeJSScene(self.threeJSView.scene, function () {
                 if (self._tracing.value) {
                     self.giJSView.toggleTrace(true);

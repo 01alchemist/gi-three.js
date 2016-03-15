@@ -1,4 +1,3 @@
-import {Matrix4} from "../../math/Matrix4";
 import {Box} from "./Box";
 import {Hit} from "../../math/Hit";
 import {Ray} from "../../math/Ray";
@@ -8,6 +7,8 @@ import {Color} from "../../math/Color";
 import {Shape, ShapeType, ShapesfromJson, directRestoreShape, ShapefromJson, restoreShape} from "./Shape";
 import {ByteArrayBase} from "../../../pointer/ByteArrayBase";
 import {DirectMemory} from "../../../pointer/DirectMemory";
+import {Matrix4} from "../../math/Matrix4";
+import {HitInfo} from "../../math/HitInfo";
 /**
  * Created by Nidin Vinayakan on 11-01-2016.
  */
@@ -24,14 +25,18 @@ export class TransformedShape implements Shape {
         }
     };
 
+    invTranspose:Matrix4;
+
     constructor(public shape:Shape = null,
                 public matrix:Matrix4 = new Matrix4(),
                 public inverse:Matrix4 = new Matrix4()) {
+        this.invTranspose = inverse.transpose();
     }
 
     directRead(memory:Float32Array, offset:number):number {
         offset = this.matrix.directRead(memory, offset);
         this.inverse = this.matrix.inverse();
+        this.invTranspose = this.inverse.transpose();
         var container:Shape[] = [];
         offset = directRestoreShape(memory, offset, container);
         this.shape = container[0];
@@ -46,9 +51,10 @@ export class TransformedShape implements Shape {
         return offset;
     }
 
-    read(memory:ByteArrayBase|DirectMemory):number{
+    read(memory:ByteArrayBase|DirectMemory):number {
         this.matrix.read(memory);
         this.inverse = this.matrix.inverse();
+        this.invTranspose = this.inverse.transpose();
         var container:Shape[] = [];
         restoreShape(memory, container);
         this.shape = container[0];
@@ -56,7 +62,7 @@ export class TransformedShape implements Shape {
         return memory.position;
     }
 
-    write(memory:ByteArrayBase|DirectMemory):number{
+    write(memory:ByteArrayBase|DirectMemory):number {
         memory.writeByte(this.type);
         this.matrix.write(memory);
         this.shape.write(memory);
@@ -66,8 +72,8 @@ export class TransformedShape implements Shape {
     static fromJson(transformedShape:TransformedShape):TransformedShape {
         return new TransformedShape(
             ShapefromJson(transformedShape.shape),
-            Matrix4.fromJson(transformedShape.matrix),
-            Matrix4.fromJson(transformedShape.inverse)
+            Matrix4.fromJson(<Matrix4>transformedShape.matrix),
+            Matrix4.fromJson(<Matrix4>transformedShape.inverse)
         );
     }
 
@@ -84,14 +90,29 @@ export class TransformedShape implements Shape {
     }
 
     intersect(r:Ray):Hit {
-        var hit:Hit = this.shape.intersect(this.inverse.mulRay(r));
-        if (!hit.ok()) {
-            return hit;
+
+        var shapeRay:Ray = this.inverse.mulRay(r);
+        var hit:Hit = this.shape.intersect(shapeRay);
+        if(!hit.ok()) {
+            return hit
         }
-        // if this.shape is a Mesh, the hit.Shape will be a Triangle in the Mesh
-        // we need to transform this Triangle, not the Mesh itself
-        var shape:TransformedShape = new TransformedShape(hit.shape, this.matrix, this.inverse);
-        return new Hit(shape, hit.T);
+        var shape = hit.shape;
+        var shapePosition = shapeRay.position(hit.T);
+        var shapeNormal = shape.getNormal(shapePosition);
+        var position = this.matrix.mulPosition(shapePosition);
+        var normal = this.invTranspose.mulDirection(shapeNormal);
+        var color = shape.getColor(shapePosition);
+        var material = shape.getMaterial(shapePosition);
+        var inside = false;
+        if(shapeNormal.dot(shapeRay.direction) > 0){
+            normal = normal.mulScalar(-1);
+            inside = true
+        }
+        var ray = new Ray(position, normal);
+        var info = new HitInfo(shape, position, normal, ray, color, material, inside);
+        hit.T = position.sub(r.origin).length();
+        hit.info = info;
+        return hit;
     }
 
     getColor(p:Vector3):Color {
@@ -103,11 +124,15 @@ export class TransformedShape implements Shape {
     }
 
     getNormal(p:Vector3):Vector3 {
-        return this.matrix.mulDirection(this.shape.getNormal(this.inverse.mulPosition(p)));
+        console.log("getNormal");
+        //return this.matrix.mulDirection(this.shape.getNormal(this.inverse.mulPosition(p)));
+        return null;
     }
 
     getRandomPoint():Vector3 {
-        return this.matrix.mulPosition(this.shape.getRandomPoint());
+        console.log("getRandomPoint");
+        //return this.matrix.mulPosition(this.shape.getRandomPoint());
+        return null;
     }
 
 }
